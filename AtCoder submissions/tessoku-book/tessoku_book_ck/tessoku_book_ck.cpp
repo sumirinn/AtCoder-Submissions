@@ -19,6 +19,6 @@ int main(){
     else left = mid;
   }
   
-  printf("%.12lf\n", mid);
+  cout << mid << endl;
 }
   
