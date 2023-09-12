@@ -12,7 +12,7 @@ int main(){
     for(int i=1; i<=n; i++){
         int mini = 10;
         for(int j=1; j<=9; j++){
-            if(n%j==0 && i%(n/j)==0 && i/(n/j)<10){
+            if(n%j==0 && i%(n/j)==0){
                 mini = min(j, mini);
             }
         }
