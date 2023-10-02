@@ -1,16 +1,23 @@
 #include <iostream>
 #include <algorithm>
+#include <string>
+#include <vector>
+#include <cmath>
 using namespace std;
+
+int rui(int a, int b){
+    int c = 1;
+    for(int i=1; i<=b; i++){
+        c *= a;
+    }
+    
+    return c;
+}
 
 int a, b;
 
 int main(){
     cin >> a >> b;
     
-    int A = 1, B = 1;
-    
-    for(int i=1; i<=b; i++) A = A * a;
-    for(int i=1; i<=a; i++) B = B * b;
-    
-    cout << A + B << endl;
+    cout << rui(a, b) + rui(b, a) << endl;
 }
