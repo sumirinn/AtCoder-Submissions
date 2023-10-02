@@ -1,32 +1,20 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <algorithm>
-#include <vector>
 #include <string>
+#include <vector>
+#include <cmath>
 using namespace std;
 
-int n, a=1;
-int v[10];
-string ans = "Yes";
+string s;
 
 int main(){
-    cin >> n;
-    for(int i=1; i<=5; i++){
-        v[i] = (n/a) % 10;
-        a = a * 10;
-    }
-
-    int c = 0;
-    v[0] = -1;
-
-    for(int i=5; i>=1; i--){
-        if(c==0){
-            if(v[i]==0) continue;
+    cin >> s;
+    for(int i=1; i<s.size(); i++){
+        if(s[i-1]<=s[i]){
+            cout << "No" << endl;
+            return 0;
         }
-
-        c = 1;
-
-        if(v[i]<=v[i-1]) ans = "No";
     }
-
-    cout << ans << endl;
+    
+    cout << "Yes" << endl;
 }
