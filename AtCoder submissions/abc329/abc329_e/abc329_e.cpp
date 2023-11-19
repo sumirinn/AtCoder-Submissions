@@ -17,10 +17,12 @@ string s, t;
 int main(){
     cin >> n >> m >> s >> t;
 
-    vector<bool> used(n);
+    bool used[200009];
+    repp(i, n) used[i] = false;
+
     queue<int> q;
     auto in = [&](int c){
-        if(c<0 || n<c+m || used[c]) return;
+        if(n<c+m) return;
         repp(i, m) if(s[c+i]!='#' && s[c+i]!=t[i]) return;
         used[c] = true;
         q.push(c);
@@ -32,7 +34,7 @@ int main(){
         int i = q.front();
         q.pop();
         repp(j, m) s[i+j] = '#';
-        for(int k=i-m+1; k<=i+m-1; k++) in(k);
+        for(int k=i-m+1; k<=i+m-1; k++) if(!(used[k]) && 0<=k && k<n) in(k);
     }
 
     if(s == string(n, '#')) cout << "Yes" << endl;
