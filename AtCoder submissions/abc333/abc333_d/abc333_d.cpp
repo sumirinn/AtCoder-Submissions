@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 #include <set>
-#include <map>
-#include <queue>
 using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
@@ -13,31 +11,42 @@ using namespace atcoder;
 #define repp(i, n) for (int i = 0; i < (int)(n); i++)
 using ll = long long;
 
+int n;
+vector<int> g[300009];
+
+int f(int pos, int ba){
+    int r = 0;
+    repp(i, g[pos].size()){
+        int s = g[pos][i];
+        if(s!=ba) r += f(s, pos);
+        //cout << s << endl;
+    }
+    r++;
+    return r;
+}
+
 int main(){
-    int n;
     cin >> n;
-    vector<vector<int>> to(n);
+    int a, b;
     rep(i, n-1){
-        int a, b;
         cin >> a >> b;
-        --a;
-        --b;
-        to[a].push_back(b);
-        to[b].push_back(a);
+        g[a].push_back(b);
+        g[b].push_back(a);
     }
 
-    int ans = n;
-    for(int v : to[0]){
-        auto f = [&](auto f, int v, int p=-1) -> int {
-            int res = 1;
-            for(int u : to[v]){
-                if(u==p) continue;
-                res += f(f, u, v);
-            }
-            return res;
-        };
-        int now = n - f(f, v, 0);
-        ans = min(ans, now);
+    int ans = 300009;
+    int cnt = g[1].size();
+
+    if(cnt==1){
+        cout << 1 << endl;
+        return 0;
     }
-    cout << ans << endl;
+
+    repp(i, cnt){
+        int r = g[1][i];
+        int l = n - f(r, 1) - 1;
+        ans = min(ans, l);
+    }
+
+    cout << ans + 1 << endl;
 }
