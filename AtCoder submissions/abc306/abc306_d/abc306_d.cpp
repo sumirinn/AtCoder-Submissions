@@ -23,21 +23,23 @@ void chmax(ll& x, ll y) {x = max(x, y);}
 int main(){
     int n;
     cin >> n;
-    vector<int> x(n), y(n);
-    repp(i, n) cin >> x[i] >> y[i];
+    int x[300009];
+    ll y[300009];
+    rep(i, n) cin >> x[i] >> y[i];
 
-    const ll inf = 1e18;
-    vector<vector<ll>> dp(n+1, vector<ll>(2, -inf));
+    ll dp[300009][10];
+    rep(i, n)repp(j, 2) dp[i][j] = -1;
+
     dp[0][0] = 0;
-    repp(i, n){
-        dp[i+1][0] = dp[i][0];
-        dp[i+1][1] = dp[i][1];
+    rep(i, n){
+        chmax(dp[i][0], dp[i-1][0]);
+        chmax(dp[i][1], dp[i-1][1]);
         if(x[i]==0){
-            chmax(dp[i+1][0], dp[i][0] + y[i]);
-            chmax(dp[i+1][0], dp[i][1] + y[i]);
+            chmax(dp[i][0], dp[i-1][0] + y[i]);
+            chmax(dp[i][0], dp[i-1][1] + y[i]);
         }
         if(x[i]==1){
-            chmax(dp[i+1][1], dp[i][0] + y[i]);
+            chmax(dp[i][1], dp[i-1][0] + y[i]);
         }
     }
     cout << max(dp[n][0], dp[n][1]) << endl;
