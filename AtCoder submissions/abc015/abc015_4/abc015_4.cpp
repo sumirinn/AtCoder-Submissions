@@ -39,7 +39,7 @@ int main(){
     rep(i, n+1)rep(j, k+1)rep(l, w+1) dp[i][j][l] = 0;
 
     rep(i, n){
-        rep(j, k){
+        rep(j, k+1){
             rep(l, w+1){  
                 chmax(dp[i+1][j][l], dp[i][j][l]);//not choose
                 if(l+a[i]<=w) chmax(dp[i+1][j+1][l+a[i]], dp[i][j][l] + b[i]);//choose
@@ -48,7 +48,7 @@ int main(){
     }
 
     int ans = 0;
-    repp(i, n)repp(j, k)repp(l, w) chmax(ans, dp[i][j][l]);
+    repp(j, k)repp(l, w) chmax(ans, dp[n][j][l]);
     cout << ans << endl;
 
 }
