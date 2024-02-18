@@ -36,29 +36,32 @@ int main(){
     int n, m;
     cin >> n >> m;
     vector<vector<int>> to(n);
+    vector<int> deg(n);
     rep(i, m){
         int u, v;
         cin >> u >> v;
         u--; v--;
         to[u].push_back(v);
+        deg[v]++;
     }
 
-    rep(i, n+1) dp[i] = -1;
+    rep(i, n+1) dp[i] = 0;
 
-    auto rec = [&](auto rec, int v) -> int {
-        if(dp[v]!=-1) return dp[v];
+    queue<int> q;
+    rep(i, n) if(deg[i]==0) q.push(i);
 
-        int res = 0;
+    while(!q.empty()){
+        int v = q.front(); q.pop();
         for(auto u : to[v]){
-            chmax(res, rec(rec, u)+1);
+            deg[u]--;
+            if(deg[u]==0){
+                q.push(u);
+                chmax(dp[u], dp[v]+1);
+            }
         }
-
-        return dp[v] = res;
-    };
+    }
 
     int ans = 0;
-    rep(i, n) chmax(ans, rec(rec, i));
-
+    rep(i, n) chmax(ans, dp[i]);
     cout << ans << endl;
-
 }
