@@ -43,7 +43,7 @@ int main(){
 
 
     auto f = [&](int s, int t, int l) -> bool {
-        int u = s+l, v = t+l;
+        int u = s+l-1, v = t+l-1;
         if(h<u || w<v) return false;
         return c[u][v] - c[s-1][v] - c[u][t-1] + c[s-1][t-1]==0;
     };
@@ -51,15 +51,16 @@ int main(){
     ll ans = 0;
     int m = min(h, w);
     repp(i, h)repp(j, w){
-        if(!f(i, j, 0)) continue;
+        if(!f(i, j, 1)) continue;
 
-        int l = 0, r = m+1;
+        int l = 1, r = m+1;
         while(l<r-1){
             int M = (l+r) / 2;
             if(f(i, j, M)) l = M;
-            else r = M;
+            else r = M - 1;
         }
-        ans += r;
+        if(f(i, j, r)) ans += r;
+        else ans += l;
     }
 
     cout << ans << endl;
