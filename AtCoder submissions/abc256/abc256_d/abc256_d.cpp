@@ -33,26 +33,27 @@ ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
 int main(){
     int n;
     cin >> n;
-    vector<P> lr(n);
+    int m = 200005;
+    vector<int> a(m, 0);
     rep(i, n){
         int l, r;
         cin >> l >> r;
-        lr[i] = P(l, r);
+        a[l]++;
+        a[r]--;
     }
-
-    sort(lr.begin(), lr.end());
-
-    vector<int> x, y;
-    rep(i, n){
-        int l = lr[i].first, r = lr[i].second;
-        if(x.empty() || y.back()<l){
-            x.push_back(l);
-            y.push_back(r);
-        }
-        else if(y.back()<r){
-            y.back() = r;
-        }
-    }
+    rep(i, m) a[i+1] += a[i];
+    vector<bool> ans(m);
+    rep(i, m) if(a[i]) ans[i] = true;
     
-    rep(i, (int)x.size()) cout << x[i] << " " << y[i] << endl;
+    bool s = true;
+    rep(i, m){
+        if(ans[i] && s){
+            cout << i << " ";
+            s = false;
+        }
+        if(ans[i]==0 && !s){
+            cout << i << endl;
+            s = true;
+        }
+    }
 }
