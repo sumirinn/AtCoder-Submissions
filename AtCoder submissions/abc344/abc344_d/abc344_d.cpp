@@ -54,8 +54,7 @@ int main(){
     dp[0][0] = 0;
     repp(i, n){
         rep(j,m+1) chmin(dp[i][j], dp[i-1][j]);
-        rep(l,a[i-1]){
-            string nex = s[i-1][l];
+        for(string nex : s[i-1]){
             int nl = nex.size();
             rep(j, m-nl+1){
                 bool ok = true;
