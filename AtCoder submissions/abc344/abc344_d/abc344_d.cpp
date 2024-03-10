@@ -50,23 +50,24 @@ int main(){
         }
     }
 
-    rep(i, n+1)rep(j,m+1) dp[i][j] = inf;
-    dp[0][0] = 0;
+    rep(i, 102)rep(j,102) dp[i][j] = inf;
+    rep(i, n) dp[i][0] = 0;
     repp(i, n){
-        rep(j,m+1) chmin(dp[i][j], dp[i-1][j]);
+        rep(j,m+1)  chmin(dp[i][j], dp[i-1][j]);
         for(string nex : s[i-1]){
-            int nl = nex.size();
-            rep(j, m-nl+1){
+            rep(j, m){
+                if(j+nex.size()>m) break;
+                if(dp[i-1][j]==inf) continue;
                 bool ok = true;
-                rep(c, nl) if(t[j+c]!=nex[c]){
+                rep(c, nex.size()) if(t[j+c]!=nex[c]){
                     ok = false;
-                    break;
+                    //cout << i << " " << j << " " <<  c << endl;
                 }
-                if(ok) chmin(dp[i][j+nl], dp[i-1][j] + 1); 
+                if(ok) chmin(dp[i][j+nex.size()], dp[i-1][j] + 1); 
             }
         }
     }
 
-    if(dp[n][m]>10010010) dp[n][m] = -1;
+    if(dp[n][m]==inf) dp[n][m] = -1;
     cout << dp[n][m] << endl;
 }
