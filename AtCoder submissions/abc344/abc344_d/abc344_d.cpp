@@ -52,10 +52,10 @@ int main(){
 
     rep(i, n+1)rep(j,m+1) dp[i][j] = inf;
     dp[0][0] = 0;
-    rep(i, n){
-        rep(j,m+1) chmin(dp[i+1][j], dp[i][j]);
-        rep(l,a[i]){
-            string nex = s[i][l];
+    repp(i, n){
+        rep(j,m+1) chmin(dp[i][j], dp[i-1][j]);
+        rep(l,a[i-1]){
+            string nex = s[i-1][l];
             int nl = nex.size();
             rep(j, m-nl+1){
                 bool ok = true;
@@ -63,7 +63,7 @@ int main(){
                     ok = false;
                     break;
                 }
-                if(ok) chmin(dp[i+1][j+nl], dp[i][j] + 1); 
+                if(ok) chmin(dp[i][j+nl], dp[i-1][j] + 1); 
             }
         }
     }
