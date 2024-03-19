@@ -32,50 +32,36 @@ ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
 
 
 int main(){
-    int n;
-    cin >> n;
+    int n; cin >> n;
     vector<vector<int>> to(n);
     rep(i,n-1){
-        int u, v;
-        cin >> u >> v;
-        u--; v--;
+        int u, v; cin >> u >> v; u--; v--;
         to[u].push_back(v);
         to[v].push_back(u);
     }
 
-    vector<int> dist(n, inf);
-    dist[0] = 0;
+    vector<int> dist(n);
     queue<int> q;
-    q.push(0);
-    while(!q.empty()){
-        int v = q.front(); q.pop();
-        for(int u : to[v]){
-            if(dist[u]!=inf) continue;
-            dist[u] = dist[v] + 1;
-            q.push(u);
-        }
-    }
-
-    int st=-1, l=-1;
-    rep(i,n)if(dist[i]>l){
-        st = i;
-        l = dist[i];
-    }
-
-    dist = vector<int>(n, inf);
-    dist[st] = 0;
-    q.push(st);
+    auto bfs = [&](int st) -> void{
+        dist = vector<int>(n, inf);
+        dist[st] = 0;
+        q.push(st);
         while(!q.empty()){
-        int v = q.front(); q.pop();
-        for(int u : to[v]){
-            if(dist[u]!=inf) continue;
-            dist[u] = dist[v] + 1;
-            q.push(u);
+            int v = q.front(); q.pop();
+            for(int u : to[v]){
+                if(dist[u]!=inf) continue;
+                dist[u] = dist[v] + 1;
+                q.push(u);
+            }
         }
-    }
+    };
 
+    bfs(0);
+    int st=-1, l=-1;
+    rep(i,n)if(dist[i]>l){ st = i; l = dist[i]; }
+
+    bfs(st);
     int ans = 0;
     rep(i,n) ans = max(ans, dist[i]);
     cout << ans + 1 << endl;
-
 }
