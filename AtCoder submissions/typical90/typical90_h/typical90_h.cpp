@@ -43,23 +43,10 @@ vector<vector<int> > calc_next(const string &S) {
 //97~122(a~z),65~90(A~Z)
 
 int main(){
-    int n;
-    string s;
-    cin >> n >> s;
+    int n; string s; cin >> n >> s;
 
-    string t = "atcoder";
-    int m = t.size();
-    vector<mint> dp(m, 0);
-    //rep(i,m) if(s[0]==t[i]) dp[i]++;
-    rep(i,n){
-        for(int j=m-1; j>=0; j--){
-            if(s[i]==t[j]){
-                if(j==0) dp[0]++;
-                else dp[j] += dp[j-1];
-            }
-        }
-    }
-    //rep(i,m) cout << i << " " << dp[i].val() << endl;
-
-    cout << dp[m-1].val() << endl;
+    string t = "atcoder"; int m = t.size();
+    vector<mint> dp(m+1, 0); dp[0] = 1;
+    rep(i,n)rep(j,m)if(s[i]==t[m-j-1]) dp[m-j] += dp[m-j-1];
+    cout << dp[m].val() << endl;
 }
