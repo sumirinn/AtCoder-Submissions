@@ -87,13 +87,12 @@ int main(){
     rep(i,n) sum += a[i];
     ll cnt = x / sum;
     ans += cnt*(ll)n;
-    ll S = cnt*sum;
-    rep(i,n){
+    x -= cnt*sum;
+    int i = 0;
+    while(x>=0){
         ans++;
-        S += a[i];
-        if(S>x){
-            cout << ans << endl;
-            return 0;
-        }
+        x -= a[i];
+        i++;
     }
+    cout << ans << endl;
 }
