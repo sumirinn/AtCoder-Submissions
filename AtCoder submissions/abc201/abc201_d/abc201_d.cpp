@@ -47,20 +47,11 @@ int main(){
     dp[h-1][w-1] = 0;
     for(int i=h-1; i>=0; i--){
         for(int j=w-1; j>=0; j--){
-            if((i+j+1)%2==0){
-                int p = 0;
-                if(a[i][j]=='+') p = 1;
-                else p = -1;
-                if(i-1>=0) chmax(dp[i-1][j],-dp[i][j]+p);
-                if(j-1>=0) chmax(dp[i][j-1],-dp[i][j]+p);
-            }
-            if((i+j+1)%2==1){
-                int p = 0;
-                if(a[i][j]=='+') p = 1;
-                else p = -1;
-                if(i-1>=0) chmax(dp[i-1][j],-dp[i][j]+p);
-                if(j-1>=0) chmax(dp[i][j-1],-dp[i][j]+p);
-            }
+            int p = 0;
+            if(a[i][j]=='+') p = 1;
+            else p = -1;
+            if(i-1>=0) chmax(dp[i-1][j],-dp[i][j]+p);
+            if(j-1>=0) chmax(dp[i][j-1],-dp[i][j]+p);
         }
     }
 
