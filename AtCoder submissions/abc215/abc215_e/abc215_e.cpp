@@ -47,12 +47,9 @@ int main(){
     vector<vector<mint>> dp(m2, vector<mint>(m));
     for(char c : s){
         int a = c - 'A';
-        vector<vector<mint>> pre(m2, vector<mint>(m));
-        swap(pre, dp);
-        rep(s,m2)rep(i,m) if(s>>i&1){
-            dp[s][i] += pre[s][i];
-            if(i==a) dp[s][i] += pre[s][i];
-            else if(!(s>>a&1)) dp[s|1<<a][a] += pre[s][i];
+        for(int s=m2-1; s>=0; s--)rep(i,m) if(s>>i&1){
+            if(i==a) dp[s][i] += dp[s][i];
+            else if(!(s>>a&1)) dp[s|1<<a][a] += dp[s][i];
         }
         dp[1<<a][a] += 1;
     }
