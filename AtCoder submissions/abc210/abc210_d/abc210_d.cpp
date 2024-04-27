@@ -52,14 +52,13 @@ int main(){
     rep(i,h)rep(j,w) cin >> a[i][j];
 
     ll ans = INF;
-    
-    rep(ri,2){
-        vector<vector<ll>> d(h,vector<ll>(w, INF));
+    rep(_,2){
+        vector<vector<ll>> d(h,vector<ll>(w,INF));
         rep(i,h)rep(j,w){
-            if(i) chmin(d[i][j], d[i-1][j]);
-            if(j) chmin(d[i][j], d[i][j-1]);
-            chmin(ans, a[i][j] + (ll)(i+j)*c + d[i][j]);
-            chmin(d[i][j], a[i][j]-(ll)(i+j)*c);
+            if(i) chmin(d[i][j],d[i-1][j]);
+            if(j) chmin(d[i][j],d[i][j-1]);
+            chmin(ans,d[i][j] + (ll)(i+j)*c + a[i][j]);
+            chmin(d[i][j], a[i][j] - (ll)(i+j)*c);
         }
         reverse(a.begin(),a.end());
     }
