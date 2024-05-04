@@ -51,7 +51,7 @@ int main(){
     cin >> x >> y >> a >> b;
 
     ll ans = 0;
-    while((double)x*a<2e18 && x*a<=x+b && x*a<y){
+    while(x<(y+a)/a && x*a<=x+b && x*a<y){
         ans++;
         x *= a;
     }
