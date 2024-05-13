@@ -1,0 +1,120 @@
+#include <bits/stdc++.h>
+using namespace std;
+#include <atcoder/all>
+using namespace atcoder;
+#define rep(i, n) for (int i = 0; i < (n); i++)
+#define repp(i, n) for (int i = 1; i <= (n); i++)
+#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
+#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
+#define pb push_back
+#define eb emplace_back
+#define mp make_pair
+#define fi first
+#define se second
+using ll = long long; using db = double;
+using ull = unsigned long long;
+using pii = pair<int, int>; using pll = pair<ll, ll>;  
+using pdd = pair<double, double>; using pli = pair<ll, int>;
+using pil = pair<int, ll>;
+const int inf = 1001001001; const ll INF = 3e18;
+using mint = modint998244353;
+//using mint = modint1000000007;
+//a,bが0だと使えないことに注意
+ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
+ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
+// res[i][c] := i 文字目以降で最初に文字 c が登場する index (存在しないときは n)
+//auto nex = calc_next で取得すると楽。
+vector<vector<int> > calc_next(const string &S) {
+    int N = (int)S.size();
+    vector<vector<int> > res(N+1, vector<int>(26, N));
+    for (int i = N-1; i >= 0; --i) {
+        for (int j = 0; j < 26; ++j) res[i][j] = res[i+1][j];
+        res[i][S[i]-'a'] = i;
+    }
+    return res;
+}
+ll c2(ll n) {return n*(n-1) / 2;}
+ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
+using P = pair<string, int>;
+using MP = map<int, vector<int>>;
+using C = complex<double>;
+C inC(){
+    double x, y;
+    cin >> x >> y;
+    return C(x,y);
+}
+struct Edge {
+    int u, v;
+    ll w;
+    Edge(){}
+    Edge(int u, int v, ll w): u(u), v(v), w(w){}
+};
+void chmax(int& x, int y) {x = max(x, y);} // change max
+void chmin(int& x, int y) {x = min(x, y);}
+const int di[] = {1, 0, -1, 0};
+const int dj[] = {0, -1, 0, 1};
+const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+//97~122(a~z),65~90(A~Z)
+
+struct A {
+    vector<vector<int>> a;
+    vector<ll> b;
+    A(const vector<vector<int>>& _a={{1,0},{0,1}},const vector<ll>& _b={0,0}):a(_a), b(_b) {}
+    A operator*(const A& x) const {
+        A res({{0,0},{0,0}});
+        rep(i,2)rep(j,2)rep(k,2){
+            res.a[i][j] += x.a[i][k]*a[k][j];
+        }
+        res.b = A(x.a)*b;
+        rep(i,2) res.b[i] += x.b[i];
+        return res;
+    }
+
+    vector<ll> operator*(const vector<ll>& x) const {
+        vector<ll> res = b;
+        rep(i,2)rep(j,2) res[i] += a[i][j]*x[j];
+        return res;
+    }
+};
+
+int main(){
+    int n;
+    cin >> n;
+    vector<vector<ll>> p(n, vector<ll>(2));
+    rep(i,n) cin >> p[i][0] >> p[i][1];
+
+    int m;
+    cin >> m;
+    vector<A> d(1);
+    rep(mi,m){
+        int op;
+        cin >> op;
+        A x;
+        if(op==1){
+            x = A({{0,1},{-1,0}});
+        }
+        else if(op==2){
+            x = A({{0,-1},{1,0}});
+        }
+        else{
+            int p;
+            cin >> p;
+            if(op==3) x = A({{-1,0},{0,1}},{2*p,0});
+            if(op==4) x = A({{1,0},{0,-1}},{0,2*p});
+        }
+
+        A y = d.back();
+        d.emplace_back(y*x);
+    }
+
+    int q;
+    cin >> q;
+    rep(qi,q){
+        int a, b;
+        cin >> a >> b;
+        b--;
+        vector<ll> ans = d[a]*p[b];
+        cout << ans[0] << " " << ans[1] << endl;
+    }
+}
