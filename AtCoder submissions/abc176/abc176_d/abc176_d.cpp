@@ -49,7 +49,7 @@ struct Edge {
     Edge(){}
     Edge(int u, int v, ll w): u(u), v(v), w(w){}
 };
-void chmax(int& x, int y) {x = max(x, y);} // change max
+void chmax(ll& x, ll y) {x = max(x, y);} // change max
 void chmin(int& x, int y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
@@ -57,48 +57,53 @@ const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
 
+
 int main(){
-    int h, w, ch, cw, dh, dw;
-    cin >> h >> w >> ch >> cw >> dh >> dw;
+    int h, w;
+    cin >> h >> w;
+    int ch, cw, dh, dw;
+    cin >> ch >> cw >> dh >> dw;
     ch--; cw--; dh--; dw--;
     vector<string> s(h);
     rep(i,h) cin >> s[i];
-    
-    int n = h * w;
-    dsu uf(n);
 
-    rep(i,h)rep(j,w){
-        if(s[i][j]=='#') continue;
-        rep(v,4){
-            int ni=i+di[v], nj=j+dj[v];
-            if(ni<0||nj<0||ni>=h||nj>=w) continue;
-            if(s[ni][nj]=='.') uf.merge(i*w+j,ni*w+nj);
+    int n = h*w;
+    dsu uf(n);
+    rep(i,h){
+        rep(j,w){
+            if(s[i][j]=='#') continue;
+            rep(v,4){
+                int ni=i+di[v], nj=j+dj[v];
+                if(ni<0||nj<0||ni>=h||nj>=w) continue;
+                if(s[ni][nj]=='.') uf.merge(i*w+j,ni*w+nj);
+            }
         }
     }
 
     vector<vector<int>> to(n);
-    rep(i,h)rep(j,w){
-        if(s[i][j]=='#') continue;
-        rep2(k,-2,2)rep2(l,-2,2){
-            int ni=i+k, nj=j+l;
-            if(ni<0||nj<0||ni>=h||nj>=w) continue;
-            if(s[ni][nj]=='#') continue;
-            if(uf.same(i*w+j,ni*w+nj)) continue;
-            int u = uf.leader(i*w+j);
-            int v = uf.leader(ni*w+nj);
-            to[u].push_back(v);
-            to[v].push_back(u);
+
+    rep(i,h){
+        rep(j,w){
+            if(s[i][j]=='#') continue;
+            int now = uf.leader(i*w+j);
+            rep2(u,-2,2)rep2(t,-2,2){
+                int ni=i+u, nj=j+t;
+                if(ni<0||nj<0||ni>=h||nj>=w) continue;
+                if(s[ni][nj]=='#') continue;
+                if(now!=uf.leader(ni*w+nj)){
+                    int nex = uf.leader(ni*w+nj);
+                    to[nex].push_back(now);
+                    to[now].push_back(nex);
+                }
+            }
         }
     }
-
-    int st = uf.leader(ch*w+cw);
-    int g = uf.leader(dh*w+dw);
 
     vector<int> visited(n);
     vector<int> dist(n, inf);
     queue<int> q;
-    q.push(st);
-    dist[st] = 0;
+    q.push(uf.leader(ch*w+cw));
+    dist[uf.leader(ch*w+cw)] = 0;
     while(!q.empty()){
         int v = q.front();
         q.pop();
@@ -109,6 +114,6 @@ int main(){
         }
     }
 
-    if(dist[g]>=inf) dist[g] = -1;
-    cout << dist[g] << endl;
+    if(dist[uf.leader(dh*w+dw)]==inf) dist[uf.leader(dh*w+dw)] = -1;
+    cout << dist[uf.leader(dh*w+dw)] << endl;
 }
