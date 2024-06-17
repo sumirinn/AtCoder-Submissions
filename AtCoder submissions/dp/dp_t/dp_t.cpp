@@ -51,21 +51,16 @@ int main(){
     repp(i,n-1){
         if(s[i-1]=='<'){
             mint sumv = 0;
-            repp(j,i){
-                sumv += dp[i][j];
-                dp[i+1][j+1] += sumv;
-            }
+            repp(j,i) dp[i+1][j+1] = dp[i][j] - dp[i][0];
         }
         if(s[i-1]=='>'){
             mint sumv = 0;
-            for(int j=i; j>=1; j--){
-                sumv += dp[i][j];
-                dp[i+1][j] += sumv;
-            }
+            for(int j=i; j>=1; j--) dp[i+1][j] = dp[i][i] - dp[i][j-1];
         }
+
+        rep(j,n) dp[i+1][j+1] += dp[i+1][j];
     }
 
     mint ans = 0;
-    repp(i,n) ans += dp[n][i];
-    cout << ans.val() << endl;
+    cout << dp[n][n].val() << endl;
 }
