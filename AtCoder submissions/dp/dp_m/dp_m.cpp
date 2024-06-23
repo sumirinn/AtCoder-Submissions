@@ -9,7 +9,7 @@ using namespace atcoder;
 #define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mp make_pair
+#define mkp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
@@ -32,7 +32,7 @@ C inC(){
     double x, y; cin >> x >> y;
     return C(x,y);
 }
-void chmax(int& x, int y) {x = max(x, y);} // change max
+void chmax(ll& x, ll y) {x = max(x, y);} // change max
 void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
@@ -47,18 +47,15 @@ int main(){
     vector<int> a(n);
     rep(i,n) cin >> a[i];
 
-    vector<mint> dp(k+2);
-    rep(i,a[0]+1) dp[max(0,k-i+1)] = 1;
-    rep(i,k+1) dp[i+1] += dp[i];
-    //rep(i,k+1) cout << (dp[i+1]-dp[i]).val() << endl;
-    //cout << endl;
-    repp(i,n-1){
+    vector<mint> dp(k+2,1);
+    dp[0] = 0;
+    rep(i,n){
         vector<mint> pre(k+2);
         swap(dp,pre);
-        repp(j,k+1) dp[j] = pre[min(k+1,j+a[i])] - pre[j-1];
+        rep(j,k+1) dp[j+1] = pre[j+1]-pre[max(0,j-a[i])];
         rep(j,k+1) dp[j+1] += dp[j];
-        //rep(i,k+1) cout << (dp[i+1]-dp[i]).val() << endl;
-        //cout << endl;
     }
-    cout << dp[1].val() << endl;
+
+    mint ans = dp[k+1] - dp[k];
+    cout << ans.val() << endl;
 }
