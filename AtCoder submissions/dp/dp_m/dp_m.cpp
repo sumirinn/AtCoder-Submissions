@@ -47,15 +47,13 @@ int main(){
     vector<int> a(n);
     rep(i,n) cin >> a[i];
 
-    vector<mint> dp(k+2,1);
-    dp[0] = 0;
+    vector<mint> dp(k+1,0);
+    dp[0] = 1;
+    vector<mint> sdp(k+2);
     rep(i,n){
-        vector<mint> pre(k+2);
-        swap(dp,pre);
-        rep(j,k+1) dp[j+1] = pre[j+1]-pre[max(0,j-a[i])];
-        rep(j,k+1) dp[j+1] += dp[j];
+        rep(j,k+1) sdp[j+1] = sdp[j] + dp[j];
+        rep(j,k+1) dp[j] = sdp[j+1]-sdp[max(0,j-a[i])];
     }
 
-    mint ans = dp[k+1] - dp[k];
-    cout << ans.val() << endl;
+    cout << dp[k].val() << endl;
 }
