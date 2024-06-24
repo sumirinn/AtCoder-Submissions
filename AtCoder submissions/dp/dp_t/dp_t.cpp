@@ -45,22 +45,21 @@ int main(){
     int n;
     string s;
     cin >> n >> s;
-    
-    vector<vector<mint>> dp(n+1,vector<mint>(n+1));
-    dp[1][1] = 1;
+
+    vector<mint> dp(n+1);
+    dp[1] = 1;
+
     repp(i,n-1){
+        vector<mint> pre(n+1);
+        swap(dp,pre);
         if(s[i-1]=='<'){
-            mint sumv = 0;
-            repp(j,i) dp[i+1][j+1] = dp[i][j] - dp[i][0];
+            repp(j,i) dp[j+1] = pre[j];
         }
         if(s[i-1]=='>'){
-            mint sumv = 0;
-            for(int j=i; j>=1; j--) dp[i+1][j] = dp[i][i] - dp[i][j-1];
+            repp(j,i) dp[j] = pre[i]-pre[j-1];
         }
-
-        rep(j,n) dp[i+1][j+1] += dp[i+1][j];
+        rep(j,n) dp[j+1] += dp[j];
     }
 
-    mint ans = 0;
-    cout << dp[n][n].val() << endl;
+    cout << dp[n].val() << endl;
 }
