@@ -3,13 +3,9 @@ using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < (n); i++)
-#define repb(i, n) for (int i = (n-1); i >= 0; i--)
 #define repp(i, n) for (int i = 1; i <= (n); i++)
-#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
-#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mkp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
@@ -18,8 +14,8 @@ using pdd = pair<double, double>; using pli = pair<ll, int>;
 using pil = pair<int, ll>;
 const int inf = 1001001001; const ll INF = 3e18;
 //using mint = modint998244353;
-//using mint = modint1000000007;
-using mint = modint;
+using mint = modint1000000007;
+//using mint = modint;
 //mint::set_mod(m);で定義できる
 //a,bが0だと使えないことに注意
 ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
@@ -41,27 +37,34 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
 
 
+
 int main(){
     int n;
     cin >> n;
     vector<ll> w(n), s(n), v(n);
     rep(i,n) cin >> w[i] >> s[i] >> v[i];
 
-    vector<ll> old(n);
-    rep(i,n) old[i] = i;
-    sort(old.begin(), old.end(),[&](int a, int b){
+    vector<int> id(n);
+    rep(i,n) id[i] = i;
+    sort(id.begin(), id.end(),[&](int a, int b){
         return min(s[a],s[b]-w[a])>min(s[b],s[a]-w[b]);
     });
 
-    int m = 20005;
-    vector<vector<ll>> dp(n+1,vector<ll>(m));
-    rep(i,n)rep(tot,m){
-        int a = old[i];
-        chmax(dp[i+1][tot],dp[i][tot]);
-        if(tot<=s[a]) chmax(dp[i+1][tot+w[a]],dp[i][tot]+v[a]);
+    const int m = 20005;
+    vector<ll> dp(m);
+    rep(i,n){
+        vector<ll> pre(m);
+        swap(dp,pre);
+        int now = id[i];
+        rep(j,m){
+            chmax(dp[j],pre[j]);
+            if(j<=s[now]){
+                chmax(dp[j+w[now]],pre[j]+v[now]);
+            }
+        }
     }
 
     ll ans = 0;
-    rep(tot,m) chmax(ans,dp[n][tot]);
+    rep(j,m) chmax(ans,dp[j]);
     cout << ans << endl;
 }
