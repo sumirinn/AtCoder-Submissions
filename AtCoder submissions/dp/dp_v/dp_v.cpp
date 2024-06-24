@@ -47,11 +47,11 @@ int main(){
     mint::set_mod(m);
     vector<vector<int>> to(n);
     rep(i,n-1){
-        int a, b;
-        cin >> a >> b;
-        a--; b--;
-        to[a].push_back(b);
-        to[b].push_back(a);
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        to[u].push_back(v);
+        to[v].push_back(u);
     }
 
     vector<mint> dp(n);
@@ -60,22 +60,19 @@ int main(){
         for(int u : to[v]){
             if(u==p) continue;
             dfs1(dfs1,u,v);
-            dp[v] *= dp[u] + 1;
+            dp[v] *= dp[u]+1;
         }
     };
 
     vector<mint> ans(n);
-    auto dfs2=[&](auto dfs2, int v, int p=-1)->void{
+    auto dfs2 =[&](auto dfs2, int v, int p=-1)->void{
         ans[v] = 1;
         for(int u : to[v]) ans[v] *= dp[u] + 1;
 
         int ns = to[v].size();
-        vector<mint> l(ns), r(ns);
-        rep(i,ns){
-            l[i] = dp[to[v][i]] + 1;
-            r[i] = dp[to[v][i]] + 1;
-        }
-        repp(i,ns-1) l[i] *= l[i-1];
+        vector<mint> l(ns),r(ns);
+        rep(i,ns) l[i] = r[i] = dp[to[v][i]] + 1;
+        rep(i,ns-1) l[i+1] *= l[i];
         for(int i=ns-2; i>=0; i--) r[i] *= r[i+1];
 
         rep(i,ns){
@@ -83,16 +80,11 @@ int main(){
             dp[v] = 1;
             if(i) dp[v] *= l[i-1];
             if(i+1<ns) dp[v] *= r[i+1];
-            //cout << i << " " << dp[v].val() << endl;
-            dfs2(dfs2,to[v][i], v);
+            dfs2(dfs2,to[v][i],v);
         }
-        
     };
 
-
     dfs1(dfs1,0);
-    //cout << dp[0].val() << endl;
     dfs2(dfs2,0);
-
     rep(i,n) cout << ans[i].val() << endl;
 }
