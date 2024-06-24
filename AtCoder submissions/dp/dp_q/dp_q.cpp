@@ -9,7 +9,6 @@ using namespace atcoder;
 #define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
@@ -32,7 +31,7 @@ C inC(){
     double x, y; cin >> x >> y;
     return C(x,y);
 }
-void chmax(int& x, int y) {x = max(x, y);} // change max
+void chmax(ll& x, ll y) {x = max(x, y);} // change max
 void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
@@ -47,17 +46,17 @@ int main(){
     int n;
     cin >> n;
     vector<int> h(n);
-    rep(i,n) cin >> h[i];
     vector<ll> a(n);
+    rep(i,n) cin >> h[i];
     rep(i,n) cin >> a[i];
 
-    segtree<ll,op,e> t(n+1);
+    segtree<ll,op,e> dp(n+1);
     rep(i,n){
-        ll pre = t.prod(0,h[i]);
-        ll now = t.get(h[i]);
-        if(now<pre+a[i]) t.set(h[i],pre+a[i]);
+        ll pre = dp.prod(0,h[i]);
+        ll now = dp.get(h[i]);
+        if(now<pre+a[i]) dp.set(h[i],pre+a[i]);
     }
 
-    ll ans = t.prod(0,n+1);
+    ll ans = dp.prod(0,n+1);
     cout << ans << endl;
 }
