@@ -9,7 +9,6 @@ using namespace atcoder;
 #define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
@@ -32,7 +31,7 @@ C inC(){
     double x, y; cin >> x >> y;
     return C(x,y);
 }
-void chmax(int& x, int y) {x = max(x, y);} // change max
+void chmax(ll& x, ll y) {x = max(x, y);} // change max
 void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
@@ -54,18 +53,19 @@ int main(){
     }
 
     vector<vector<mint>> dp(n,vector<mint>(2));
-    
     auto dfs =[&](auto dfs, int v, int p=-1)->void{
         dp[v][0] = 1;
         dp[v][1] = 1;
-        for(int u :to[v]){
-            if(u==p) continue;
+        for(int u : to[v]){
+            if(p==u) continue;
             dfs(dfs,u,v);
-            dp[v][0] = dp[v][0]*(dp[u][0]+dp[u][1]);
-            dp[v][1] = dp[v][1]*dp[u][0];
+            dp[v][0] *= dp[u][1];
+            dp[v][1] *= dp[u][0] + dp[u][1];
         }
     };
 
+
     dfs(dfs,0);
-    cout << (dp[0][0]+dp[0][1]).val() << endl;
+    mint ans = dp[0][0] + dp[0][1];
+    cout << ans.val() << endl;
 }
