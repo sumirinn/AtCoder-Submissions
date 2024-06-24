@@ -44,26 +44,21 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n;
     cin >> n;
-    vector<vector<ll>> a(n,vector<ll>(n,0));
+    vector<vector<ll>> a(n,vector<ll>(n));
     rep(i,n)rep(j,n) cin >> a[i][j];
 
     int n2 = 1<<n;
-    vector<ll> cnt(n2,0);
-    rep(msk,n2){
-        rep(i,n)rep2(j,i+1,n-1){
-            if(msk&(1<<i)){
-                if(msk&(1<<j)){
-                    cnt[msk] += a[i][j];
-                }
-            }
+    vector<ll> cnt(n2);
+    rep(s,n2){
+        rep(i,n)rep(j,n){
+            if(s&1<<i && s&1<<j) cnt[s] += a[i][j];
         }
+        cnt[s] /= 2;
     }
-
     vector<ll> dp(n2);
-    rep(msk,n2){
-        for(int msk2=msk; msk2>0; msk2=(msk2-1)&msk){
-            ll nex = dp[msk-msk2] + cnt[msk2];
-            chmax(dp[msk],nex);
+    rep(s,n2){
+        for(int s2=s; s2>0; s2=(s2-1)&s){
+            chmax(dp[s],dp[s-s2]+cnt[s2]);
         }
     }
 
