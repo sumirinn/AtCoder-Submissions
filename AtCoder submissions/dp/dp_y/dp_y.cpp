@@ -3,13 +3,9 @@ using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < (n); i++)
-#define repb(i, n) for (int i = (n-1); i >= 0; i--)
 #define repp(i, n) for (int i = 1; i <= (n); i++)
-#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
-#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mkp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
@@ -39,7 +35,6 @@ const int dj[] = {0, -1, 0, 1};
 const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
-
 
 struct modinv {
   int n; vector<mint> d;
@@ -79,30 +74,27 @@ int main(){
     n++;
     vector<int> x(n+1), y(n+1);
     repp(i,n-1) cin >> y[i] >> x[i];
-    y[0]=1; x[0]=1;
-    y[n]=h; x[n]=w;
+    y[0] = x[0] = 1;
+    y[n] = h; x[n] = w;
 
-    vector<int> old(n+1);
-    rep(i,n+1) old[i] = i;
-    sort(old.begin(),old.end(),[&](int a, int b){
+    vector<int> id(n+1);
+    rep(i,n+1) id[i] = i;
+    sort(id.begin(),id.end(),[&](int a, int b){
         if(x[a]!=x[b]) return x[a]<x[b];
         else return y[a]<y[b];
     });
 
     vector<vector<mint>> dp(n+1,vector<mint>(2));
     dp[0][0] = 1;
-    rep(i,n)rep(m,2){
-        int a = old[i];
-        rep2(j,i+1,n){
-            if(x[a]<=x[old[j]] && y[a]<=y[old[j]]){
-                int dx = x[old[j]] - x[a];
-                int dy = y[old[j]] - y[a];
-                dp[j][1-m] += dp[i][m]*comb(dx+dy,dx);
-            }
+    rep(i,n)rep(ri,2){
+        int now = id[i];
+        for(int j=i+1; j<=n; j++){
+                int dx = x[id[j]] - x[now];
+                int dy = y[id[j]] - y[now];
+                dp[j][1-ri] += dp[i][ri]*comb(dx+dy,dx);
         }
     }
 
-    mint ans = dp[n][1]-dp[n][0];
+    mint ans = dp[n][1] - dp[n][0];
     cout << ans.val() << endl;
-
 }
