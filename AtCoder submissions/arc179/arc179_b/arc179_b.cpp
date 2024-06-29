@@ -47,9 +47,11 @@ int main(){
     }
 
     int m2 = 1<<m;
-    vector<vector<mint>> dp(n+1,vector<mint>(m2));
-    dp[0][m2-1] = 1;
+    vector<mint> dp(m2);
+    dp[m2-1] = 1;
     rep(i,n){
+        vector<mint> pre(m2);
+        swap(dp,pre);
         rep(j,m2){
             rep(k,m){
                 if(!(j&1<<k)) continue;
@@ -58,12 +60,12 @@ int main(){
                 for(int nex : mp[k]){
                     ps |= 1<<nex;
                 }
-                dp[i+1][ps] += dp[i][j];
+                dp[ps] += pre[j];
             }
         }
     }
 
     mint ans = 0;
-    rep(j,m2) ans += dp[n][j];
+    rep(j,m2) ans += dp[j];
     cout << ans.val() << endl;
 }
