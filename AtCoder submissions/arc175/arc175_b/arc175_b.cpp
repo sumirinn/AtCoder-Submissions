@@ -43,13 +43,8 @@ int main(){
     cin >> n >> a >> b >> s;
     a = min(a,b*2);
 
-    ll ans = 0;
     int cnt = 0;
     rep(i,n*2) if(s[i]=='(') cnt++;
-    int c = min(abs(n-cnt),cnt);
-    //cout << cnt << endl;
-    //cout << c << endl;
-
     if(cnt<n){
         rep(i,n*2){
             if(s[i]=='(') s[i] = ')';
@@ -57,11 +52,10 @@ int main(){
         }
         reverse(s.begin(),s.end());
     }
-    //cout << s << endl;
-    //　(が多い
+
     int d = 0;
     int pos = 2*n - 1;
-    ll res = 0;
+    ll ans = 0;
     rep(i,n*2){
         if(s[i]=='('){
             d++;
@@ -70,9 +64,8 @@ int main(){
             if(d-1<0){
                 while(s[pos]==')') pos--;
                 s[pos] = ')';
-                s[i] = '(';
                 d++;
-                res += a;
+                ans += a;
             }
             else{
                 d--;
@@ -80,6 +73,6 @@ int main(){
         }        
     }
 
-        res += (ll)(d/2)*b;
-        cout << res << endl;
+    ans += (ll)(d/2)*b;
+    cout << ans << endl;
 }
