@@ -49,17 +49,9 @@ int main(){
     }
 
     vector<int> ans(n);
-    ans[0] = 0;
-    int cnt = 1;
+    rep(i,n) ans[i] = i;
     rep(i,n){
-        if(i==0) continue;
-        if(b[i]){
-            ans[i] = i + 1;
-        }
-        else{
-            ans[i] = cnt;
-            cnt = i + 1;
-        }
+        if(b[i]) swap(ans[i],ans[i+1]);
     }
     rep(i,n) cout << ans[i] + 1 << " ";
     cout << endl;
