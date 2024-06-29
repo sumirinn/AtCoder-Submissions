@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+using namespace std;
+#include <atcoder/all>
+using namespace atcoder;
+#define rep(i, n) for (int i = 0; i < (n); i++)
+#define repp(i, n) for (int i = 1; i <= (n); i++)
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+using ll = long long; using db = double; using ull = unsigned long long;
+using pii = pair<int, int>; using pll = pair<ll, ll>;  
+using pdd = pair<double, double>; using pli = pair<ll, int>;
+using pil = pair<int, ll>;
+const int inf = 1001001001; const ll INF = 3e18;
+using mint = modint998244353;
+//using mint = modint1000000007;
+//using mint = modint;
+//mint::set_mod(m);で定義できる
+//a,bが0だと使えないことに注意
+ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
+ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
+ll c2(ll n) {return n*(n-1) / 2;} ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
+using P = pair<ll, int>;
+using C = complex<double>;
+C inC(){
+    double x, y; cin >> x >> y;
+    return C(x,y);
+}
+void chmax(ll& x, ll y) {x = max(x, y);} // change max
+void chmin(ll& x, ll y) {x = min(x, y);}
+const int di[] = {1, 0, -1, 0};
+const int dj[] = {0, -1, 0, 1};
+const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+//97~122(a~z),65~90(A~Z)
+
+
+int main(){
+    int n;
+    ll a, b;
+    string s;
+    cin >> n >> a >> b >> s;
+    a = min(a,b*2);
+
+    ll ans = 0;
+    int cnt = 0;
+    rep(i,n*2) if(s[i]=='(') cnt++;
+    int c = min(abs(n-cnt),cnt);
+    //cout << cnt << endl;
+    //cout << c << endl;
+
+    if(cnt<n){
+        rep(i,n*2){
+            if(s[i]=='(') s[i] = ')';
+            else s[i] = '(';
+        }
+        reverse(s.begin(),s.end());
+    }
+    //cout << s << endl;
+    //　(が多い
+    int d = 0;
+    int pos = 2*n - 1;
+    ll res = 0;
+    rep(i,n*2){
+        if(s[i]=='('){
+            d++;
+        }
+        if(s[i]==')'){
+            if(d-1<0){
+                while(s[pos]==')') pos--;
+                s[pos] = ')';
+                s[i] = '(';
+                d++;
+                res += a;
+            }
+            else{
+                d--;
+            }
+        }        
+    }
+
+        res += (ll)(d/2)*b;
+        cout << res << endl;
+}
