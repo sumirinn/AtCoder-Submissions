@@ -11,7 +11,6 @@ using namespace atcoder;
 using ll = long long; using db = double; using ull = unsigned long long;
 using pii = pair<int, int>; using pll = pair<ll, ll>;  
 using pdd = pair<double, double>; using pli = pair<ll, int>;
-using pil = pair<int, ll>;
 const int inf = 1001001001; const ll INF = 3e18;
 using mint = modint998244353;
 //using mint = modint1000000007;
@@ -34,10 +33,12 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 using S = ll;
 using F = ll;
 S op(S a, S b){return max(a,b);}
-S e(){return 0;}
+S e(){return 0;}//<-ここ、なんで-INFじゃないの????
 S mapping(F f, S x){return f+x;}
 F composition(F f, F g){return f+g;}
 F id(){return 0;}
+
+using pil = pair<int, ll>;
 
 int main(){
   int n, m;
@@ -48,14 +49,13 @@ int main(){
     ll a;
     cin >> l >> r >> a;
     l--; r--;
-    p[r].eb(l,a);
+    p[r].emplace_back(l,a);
   }
 
   lazy_segtree<S,op,e,F,mapping,composition,id> dp(n);
-  rep(i,n) dp.set(i,INF);
   rep(r,n){
-    ll opt = dp.prod(0,r);
-    dp.set(r,opt);
+    ll pre = dp.prod(0,r);
+    dp.set(r,pre);
     for(auto x : p[r]){
       auto [l,a] = x;
       dp.apply(l,r+1,a);
