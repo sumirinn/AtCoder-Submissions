@@ -39,12 +39,14 @@ int main(){
     two_sat ts(n*2);
     rep(i,n){
         cin >> a[i] >> a[i+n];
-        ts.add_clause(i,1,i+n,1);
+        ts.add_clause(i,true,i+n,true);
     }
 
     rep(i,n*2){
         for(int j=i+1; j<2*n; j++){
-            if(abs(a[i]-a[j])<d) ts.add_clause(i,0,j,0);
+            if(abs(a[i]-a[j])<d){
+                ts.add_clause(i,false,j,false);
+            }
         }
     }
 
