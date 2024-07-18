@@ -32,16 +32,15 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
 
 
-int op(int a, int b){return max(a,b);}
-int e(){return -1;}
-
+ll op(ll a, ll b){return max(a,b);}
+ll e(){return -1;}
 
 int main(){
     int n, q;
     cin >> n >> q;
-    segtree<int,op,e> t(n);
+    segtree<ll,op,e> t(n);
     rep(i,n){
-        int a;
+        ll a;
         cin >> a;
         t.set(i,a);
     }
@@ -51,7 +50,7 @@ int main(){
         cin >> type;
         if(type==1){
             int x;
-            int v;
+            ll v;
             cin >> x >> v;
             x--;
             t.set(x,v);
@@ -60,15 +59,15 @@ int main(){
             int l, r;
             cin >> l >> r;
             l--;
-            int res = t.prod(l,r);
+            ll res = t.prod(l,r);
             cout << res << endl;
         }
         if(type==3){
             int x;
-            int v;
+            ll v;
             cin >> x >> v;
             x--;
-            auto f =[&](int val)->bool{return val<v;};
+            auto f =[&](ll val)->bool{return val<v;};
             int res = t.max_right(x,f) + 1;
             cout << res << endl;
         }
