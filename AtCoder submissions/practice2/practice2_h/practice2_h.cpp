@@ -47,7 +47,7 @@ int main(){
     };
 
     rep(i,n)rep(j,n){
-        if(i==j) continue;
+        if(i<=j) continue;
         if(f(x[i],x[j])) ts.add_clause(i,false,j,false);
         if(f(x[i],y[j])) ts.add_clause(i,false,j+n,false);
         if(f(y[i],x[j])) ts.add_clause(i+n,false,j,false);
