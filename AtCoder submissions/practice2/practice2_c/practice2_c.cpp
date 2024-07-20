@@ -32,13 +32,15 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
 
 
-
 int main(){
     int t;
     cin >> t;
+    vector<ll> ans;
     rep(ti,t){
         ll n, m, a, b;
         cin >> n >> m >> a >> b;
-        cout << floor_sum(n,m,a,b) << endl;
+        ans.pb(floor_sum(n,m,a,b));
     }
+
+    for(ll res : ans) cout << res << endl;
 }
