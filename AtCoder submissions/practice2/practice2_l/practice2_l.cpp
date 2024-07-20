@@ -31,13 +31,14 @@ const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
 
+
 struct S{
-    ll zero, one, val;
-    S(ll zero=0, ll one=0, ll val=0): zero(zero), one(one), val(val) {}
+    ll zero, one, siz;
+    S(ll zero=0, ll one=0, ll siz=0): zero(zero), one(one), siz(siz) {} 
 };
 
 S op(S x, S y){
-    return S(x.zero+y.zero, x.one+y.one, x.val+y.val + x.one*y.zero);
+    return S(x.zero+y.zero, x.one+y.one, x.siz+y.siz + x.one*y.zero);
 }
 
 S e(){return S(0,0,0);}
@@ -45,7 +46,7 @@ S e(){return S(0,0,0);}
 using F = bool;
 
 S mapping(F f, S s){
-    if(f) return S(s.one, s.zero, s.one*s.zero - s.val);
+    if(f) return S(s.one, s.zero, s.zero*s.one-s.siz);
     else return s;
 }
 
@@ -60,24 +61,21 @@ F id(){return false;}
 int main(){
     int n, q;
     cin >> n >> q;
-    lazy_segtree<S,op,e,F,mapping,composition,id> seg(n);
+    lazy_segtree<S,op,e,F,mapping,composition,id> lt(n);
     rep(i,n){
         int a;
         cin >> a;
-        if(a) seg.set(i,S(0,1,0));
-        else seg.set(i,S(1,0,0));
+        if(a) lt.set(i, S(0,1,0));
+        else lt.set(i,S(1,0,0));
     }
 
     rep(qi,q){
-        int t, l, r;
-        cin >> t >> l >> r;
-        l--; 
-        if(t==1){
-            seg.apply(l,r,true);
-        }
-        if(t==2){
-            S res = seg.prod(l,r);
-            cout << res.val << endl;
-        }
+        int t;
+        cin >> t;
+        int l, r;
+        cin >> l >> r;
+        l--;
+        if(t==1) lt.apply(l,r,true);
+        if(t==2) cout << lt.prod(l,r).siz << endl;
     }
 }
