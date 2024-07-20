@@ -32,35 +32,29 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
 
 
-const ll b = (ll)1<<40;
-
 int main(){
     int n, k;
     cin >> n >> k;
     vector<vector<ll>> a(n,vector<ll>(n));
     rep(i,n)rep(j,n) cin >> a[i][j];
 
-    mcf_graph<int,ll> G(n*2+2);
+    mcf_graph<int,ll> g(n*2+2);
     int st=n*2, gl=n*2+1;
-    // 容量 1、コスト B - A[i][j]
-    rep(i,n)rep(j,n) G.add_edge(i,j+n,1,b-a[i][j]);
+    ll mx = 1e10;
     rep(i,n){
-        // 容量 K, コスト 0
-        G.add_edge(st,i,k,0);
-        G.add_edge(i+n,gl,k,0);
+        g.add_edge(st,i,k,0);
+        rep(j,n) g.add_edge(i,j+n,1,mx-a[i][j]);
+        g.add_edge(i+n,gl,k,0);
     }
-    // バイパス
-    G.add_edge(st,gl,n*k,b);
+    g.add_edge(st,gl,n*k,mx);
 
-    auto [max_flow, min_cost] = G.flow(st,gl,n*k);
-
-    vector<string> grid(n,string(n,'.'));
-    const auto &edges = G.edges();
-    for(const auto &e : edges){
+    auto[max_flow,min_cost] = g.flow(st,gl,n*k);
+    cout << mx*(ll)n*(ll)k - min_cost << endl;
+    vector<string> ans(n,string(n,'.'));
+    for(auto e : g.edges()){
         if(e.from==st||e.to==gl||e.flow==0) continue;
-        grid[e.from][e.to-n] = 'X';
+        ans[e.from][e.to-n] = 'X';
     }
 
-    cout << b*n*k - min_cost << endl;
-    rep(i,n) cout << grid[i] << endl;
+    rep(i,n) cout << ans[i] << endl;
 }
