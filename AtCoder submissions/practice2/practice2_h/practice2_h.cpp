@@ -33,21 +33,25 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
 int main(){
-    int n, d;
+    int n;
+    ll d;
     cin >> n >> d;
-    vector<int> a(n*2);
     two_sat ts(n*2);
-    rep(i,n){
-        cin >> a[i] >> a[i+n];
-        ts.add_clause(i,true,i+n,true);
-    }
+    rep(i,n) ts.add_clause(i,true,i+n,true);
+    vector<ll> x(n), y(n);
+    rep(i,n) cin >> x[i] >> y[i];
 
-    rep(i,n*2){
-        for(int j=i+1; j<2*n; j++){
-            if(abs(a[i]-a[j])<d){
-                ts.add_clause(i,false,j,false);
-            }
-        }
+    auto f =[&](ll a, ll b)->bool{
+        if(abs(a-b)<d) return true;
+        else return false;
+    };
+
+    rep(i,n)rep(j,n){
+        if(i==j) continue;
+        if(f(x[i],x[j])) ts.add_clause(i,false,j,false);
+        if(f(x[i],y[j])) ts.add_clause(i,false,j+n,false);
+        if(f(y[i],x[j])) ts.add_clause(i+n,false,j,false);
+        if(f(y[i],y[j])) ts.add_clause(i+n,false,j+n,false);
     }
 
     if(ts.satisfiable()) cout << "Yes" << endl;
@@ -58,7 +62,8 @@ int main(){
 
     auto ans = ts.answer();
     rep(i,n){
-        if(ans[i]) cout << a[i] << endl;
-        else cout << a[i+n] << endl;;
+        if(ans[i]) cout << x[i] << endl;
+        else cout << y[i] << endl;
     }
+
 }
