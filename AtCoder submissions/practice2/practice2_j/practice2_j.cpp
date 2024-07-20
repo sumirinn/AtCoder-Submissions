@@ -38,38 +38,36 @@ ll e(){return -1;}
 int main(){
     int n, q;
     cin >> n >> q;
-    segtree<ll,op,e> t(n);
+    segtree<ll,op,e> seg(n);
     rep(i,n){
         ll a;
         cin >> a;
-        t.set(i,a);
+        seg.set(i,a);
     }
 
     rep(qi,q){
-        int type;
-        cin >> type;
-        if(type==1){
+        int t;
+        cin >> t;
+        if(t==1){
             int x;
             ll v;
             cin >> x >> v;
             x--;
-            t.set(x,v);
+            seg.set(x,v);
         }
-        if(type==2){
+        if(t==2){
             int l, r;
             cin >> l >> r;
             l--;
-            ll res = t.prod(l,r);
-            cout << res << endl;
+            cout << seg.prod(l,r) << endl;
         }
-        if(type==3){
+        if(t==3){
             int x;
             ll v;
             cin >> x >> v;
             x--;
-            auto f =[&](ll val)->bool{return val<v;};
-            int res = t.max_right(x,f) + 1;
-            cout << res << endl;
+            auto f =[&](ll val){return val<v;};
+            cout << seg.max_right(x,f) + 1 << endl;
         }
     }
 }
