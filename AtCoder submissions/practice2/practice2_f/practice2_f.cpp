@@ -35,11 +35,10 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, m;
     cin >> n >> m;
-    vector<ll> a(n), b(m);
+    vector<ll>  a(n), b(m);
     rep(i,n) cin >> a[i];
     rep(i,m) cin >> b[i];
-
-    auto c = convolution(a,b);
+    vector<ll> c = convolution(a,b);
     rep(i,n+m-1) cout << c[i] << " ";
     cout << endl;
 }
