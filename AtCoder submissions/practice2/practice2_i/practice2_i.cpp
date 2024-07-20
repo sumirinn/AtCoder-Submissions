@@ -35,12 +35,11 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     string s;
     cin >> s;
-    ll n = s.size();
+    int n = s.size();
     auto sa = suffix_array(s);
     auto lcp = lcp_array(s,sa);
 
     ll sum = 0;
     for(auto v : lcp) sum += v;
-
     cout << c2((ll)n+1) - sum << endl;
 }
