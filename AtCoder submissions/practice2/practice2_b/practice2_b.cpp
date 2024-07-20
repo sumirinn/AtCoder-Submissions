@@ -35,26 +35,26 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, q;
     cin >> n >> q;
-    fenwick_tree<ll> t(n);
+    fenwick_tree<ll> ft(n);
     rep(i,n){
         ll a;
         cin >> a;
-        t.add(i,a);
+        ft.add(i,a);
     }
 
     rep(qi,q){
-        int type;
-        cin >> type;
-        if(type==0){
-            int p; 
+        int t;
+        cin >> t;
+        if(t==0){
+            int p;
             ll x;
             cin >> p >> x;
-            t.add(p,x);
+            ft.add(p,x);
         }
-        if(type==1){
+        if(t==1){
             int l, r;
             cin >> l >> r;
-            cout << t.sum(l,r) << endl;
+            cout << ft.sum(l,r) << endl;
         }
     }
 }
