@@ -31,13 +31,16 @@ const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 //97~122(a~z),65~90(A~Z)
 
+
 struct S{
-    mint val;
     ll siz;
-    S(mint val=0, ll siz=0): val(val), siz(siz) {}
+    mint val;
+    S(ll siz=0, mint val=0): siz(siz), val(val) {} 
 };
 
-S op(S x, S y){return S(x.val+y.val, x.siz+y.siz);}
+S op(S x, S y){
+    return S(x.siz+y.siz, x.val+y.val);
+}
 
 S e(){return S(0,0);}
 
@@ -47,42 +50,39 @@ struct F{
 };
 
 S mapping(F f, S s){
-    return S(f.b*s.val+f.c*s.siz, s.siz);
+    return S(s.siz, f.b*s.val + f.c*s.siz);
 }
 
 F composition(F g, F f){
-    return F(g.b*f.b, g.b*f.c+g.c);
+    return F(g.b*f.b, g.b*f.c + g.c);
 }
 
 F id(){return F(1,0);}
 
+
 int main(){
     int n, q;
     cin >> n >> q;
-    lazy_segtree<S,op,e,F,mapping,composition,id> t(n);
+    lazy_segtree<S,op,e,F,mapping,composition,id> lt(n);
     rep(i,n){
-        ll x;
-        cin >> x;
-        t.set(i,S(x,1));
+        ll a;
+        cin >> a;
+        lt.set(i, S(1,(mint)a));
     }
 
-    vector<mint> ans;
     rep(qi,q){
-        int type;
-        cin >> type;
-        if(type==0){
+        int t;
+        cin >> t;
+        if(t==0){
             int l, r;
             ll b, c;
             cin >> l >> r >> b >> c;
-            t.apply(l,r,F(b,c));
+            lt.apply(l,r,F(b,c));
         }
-        if(type==1){
+        if(t==1){
             int l, r;
             cin >> l >> r;
-            S res = t.prod(l,r);
-            ans.pb(res.val);
+            cout << lt.prod(l,r).val.val() << endl;
         }
     }
-
-    for(mint res : ans) cout << res.val() << endl;
 }
