@@ -3,20 +3,16 @@ using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < (n); i++)
-#define repb(i, n) for (int i = (n-1); i >= 0; i--)
 #define repp(i, n) for (int i = 1; i <= (n); i++)
-#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
-#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mkp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
-using pii = pair<int, int>; using pll = pair<ll, ll>;  
-using pdd = pair<double, double>; using pli = pair<ll, int>;
-using pil = pair<int, ll>;
-const int inf = 1001001001; const ll INF = 3e18;
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<double, double>; 
+using pli = pair<ll, int>; using pil = pair<int, ll>;
+const int inf = 1001001001; 
+const ll INF = 3e18;
 //using mint = modint998244353;
 using mint = modint1000000007;
 //using mint = modint;
@@ -24,24 +20,17 @@ using mint = modint1000000007;
 //a,bが0だと使えないことに注意
 ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
 ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-ll c2(ll n) {return n*(n-1) / 2;} ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-using P = pair<ll, int>;
-using MP = map<int, vector<int>>;
+ll c2(ll n) {return n*(n-1) / 2;} 
+ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
+using P = pair<double, int>;
 using C = complex<double>;
-C inC(){
-    double x, y; cin >> x >> y;
-    return C(x,y);
-}
-void chmax(ll& x, ll y) {x = max(x, y);} // change max
+void chmax(ll& x, ll y) {x = max(x, y);} 
 void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
 const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-//97~122(a~z),65~90(A~Z)
 
-ll op(ll a, ll b){return max(a,b);}
-ll e(){return 0;}
 
 int main(){
     int n;
@@ -50,22 +39,17 @@ int main(){
     vector<int> c(n);
     vector<ll> s(n);
     rep(i,n){
-        int a, b;
-        cin >> a >> b >> s[i];
-        d[i] = pii(a,i);
-        c[i] = b;
+        cin >> d[i].fi >> c[i] >> s[i];
+        d[i].se = i;
     }
-
-    sort(d.begin(),d.end());
+    sort(d.begin(), d.end());
 
     const int m = 5000;
     vector<ll> dp(m+1,0);
     rep(k,n){
         int i = d[k].se;
-        for(int j=m; j>=0; j--){
-            if(j+c[i]<=m && j+c[i]<=d[k].fi){
-                chmax(dp[j+c[i]],dp[j]+s[i]);
-            }
+        for(int j=d[k].fi; j>=0; j--){
+            if(j+c[i]<=d[k].fi) chmax(dp[j+c[i]],dp[j]+s[i]);
         }
     }
 
