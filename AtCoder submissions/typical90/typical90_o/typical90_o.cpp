@@ -80,9 +80,7 @@ int main(){
     repp(k,n){
         mint ans = 0;
         for(int i=1; i<=n/k + 1; i++){
-            int s1 = n - (k-1)*(i-1);
-            int s2 = i;
-            ans += comb(s1,s2);
+            ans += comb(n - (k-1)*(i-1),i);
         }
         cout << ans.val() << endl;
     }
