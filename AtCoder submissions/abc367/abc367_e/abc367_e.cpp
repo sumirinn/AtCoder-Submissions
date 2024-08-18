@@ -40,21 +40,20 @@ int main(){
     rep(i,n) cin >> x[i], x[i]--;
     rep(i,n) cin >> a[i];
 
-    const int D = 60;
-    vector<vector<int>> d(D,vector<int>(n));
-    d[0] = x;
-    rep(i,D-1){
-        rep(v,n) d[i+1][v] = d[i][d[i][v]]; 
+    auto comp =[&](vector<int> f1, vector<int> f2){
+        vector<int> f(n);
+        rep(i,n) f[i] = f1[f2[i]];
+        return f;
+    };
+
+    vector<int> f(n);
+    rep(i,n) f[i] = i;
+    while(k){
+        if(k&1) f = comp(f,x);
+        x = comp(x,x);
+        k >>= 1;
     }
 
-    vector<int> ans(n);
-    rep(i,n) ans[i] = i;
-    rep(prev,n){
-        int v = prev;
-        rep(i,D)if(k>>i&1) v = d[i][v];
-        ans[prev] = v;
-    }
-
-    rep(i,n) cout << a[ans[i]] << " ";
+    rep(i,n) cout << a[f[i]] << " ";
     cout << endl;
 }
