@@ -60,7 +60,6 @@ int main(){
 
     auto dfs = [&](auto dfs, int pos, int dep, int str)->void{
         int ni = pos/w;
-        //cout << ni << endl;
         int nj = pos%w;
 
         if(dep==w+1){
