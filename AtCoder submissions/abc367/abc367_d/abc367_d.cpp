@@ -38,16 +38,27 @@ int main(){
     vector<int> a(n);
     rep(i,n) cin >> a[i];
 
-    vector<int> s(n+1,0);
-    rep(i,n) s[i+1] = (s[i]+a[i])%m;
-    int L = s[n];
+    int pos = 0;
+    vector<int> cnt(m);
+    vector<int> ps(n);
     
-    ll ans = 0;
-    vector<int> cnt(m,0);
-    rep(r,n){
-        ans += cnt[s[r]];
-        ans += cnt[(s[r]-L+m)%m];
-        cnt[s[r]]++;
+    ps[0] = 0;
+    cnt[0]++;
+    rep(i,n-1){
+        pos += a[i]; pos %= m;
+        cnt[pos]++;
+        ps[i+1] = pos;
     }
+    pos += a[n-1]; pos %= m;
+
+    ll ans = 0;
+    int z = 0;
+    rep(i,n){
+        ans += cnt[z]-1;
+        cnt[ps[i]]--;
+        cnt[(pos+z)%m]++;
+        z += a[i]; z %= m;
+    }
+
     cout << ans << endl;
 }
