@@ -35,36 +35,19 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, m;
     cin >> n >> m;
-    vector<ll> a(n);
+    vector<int> a(n);
     rep(i,n) cin >> a[i];
-    rep(i,n) a[i] %= m;
 
-    int pos = 0;
-    vector<int> cnt(m);
-    vector<int> ps(n);
+    vector<int> s(n+1,0);
+    rep(i,n) s[i+1] = (s[i]+a[i])%m;
+    int L = s[n];
     
-    ps[0] = 0;
-    cnt[0]++;
-    rep(i,n-1){
-        pos += a[i]; pos %= m;
-        cnt[pos]++;
-        ps[i+1] = pos;
-    }
-    pos += a[n-1];
-    pos %= m;
-    //cout << pos << endl;
-    //rep(i,m) cout << cnt[i] << endl;
-
     ll ans = 0;
-    int z = 0;
-    int pos2 = 0;
-    rep(i,n){
-        ans += (ll)(cnt[z]-1);
-        cnt[ps[i]]--;
-        z += a[i]; z %= m;
-        cnt[(pos+pos2)%m]++;
-        pos2 += a[i]; pos2 %= m;
+    vector<int> cnt(m,0);
+    rep(r,n){
+        ans += cnt[s[r]];
+        ans += cnt[(s[r]-L+m)%m];
+        cnt[s[r]]++;
     }
-
     cout << ans << endl;
 }
