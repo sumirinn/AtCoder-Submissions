@@ -52,12 +52,10 @@ int main(){
     pos += a[n-1]; pos %= m;
 
     ll ans = 0;
-    int z = 0;
     rep(i,n){
-        ans += cnt[z]-1;
+        ans += cnt[ps[i]]-1;
         cnt[ps[i]]--;
-        cnt[(pos+z)%m]++;
-        z += a[i]; z %= m;
+        cnt[(pos+ps[i])%m]++;
     }
 
     cout << ans << endl;
