@@ -37,26 +37,22 @@ int main(){
     ll k;
     cin >> n >> k;
     vector<int> a(n), x(n);
-    rep(i,n) cin >> x[i];
-    rep(i,n) x[i]--;
+    rep(i,n) cin >> x[i], x[i]--;
     rep(i,n) cin >> a[i];
 
-    int m = 61;
-    vector<vector<int>> d(m,vector<int>(n));
-    rep(i,n) d[0][i] = x[i];
-    rep(s,m-1){
-        rep(i,n) d[s+1][i] = d[s][d[s][i]]; 
+    const int D = 60;
+    vector<vector<int>> d(D,vector<int>(n));
+    d[0] = x;
+    rep(i,D-1){
+        rep(v,n) d[i+1][v] = d[i][d[i][v]]; 
     }
-
-    //rep(i,n) cout << d[1][i] << endl;
 
     vector<int> ans(n);
     rep(i,n) ans[i] = i;
-    rep(s,m){
-        if((ll)1<<s&k){
-            //cout << s << endl;
-            rep(i,n) ans[i] = d[s][ans[i]];
-        }
+    rep(prev,n){
+        int v = prev;
+        rep(i,D)if(k>>i&1) v = d[i][v];
+        ans[prev] = v;
     }
 
     rep(i,n) cout << a[ans[i]] << " ";
