@@ -32,21 +32,61 @@ const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
+// Coordinate Compression
+// https://youtu.be/fR3W5IcBGLQ?t=8550
+template<typename T=int>
+struct CC {
+    bool initialized;
+    //座標圧縮が初期化されているかどうかを示すbool型変数
+    vector<T> xs;
+    CC(): initialized(false) {}
+    void add(T x) { xs.push_back(x); }
+    void init() {
+        sort(xs.begin(), xs.end());
+        xs.erase(unique(xs.begin(),xs.end()),xs.end());
+        //重複要素の削除
+        initialized = true;
+    }
+    //xs.(a[i])とかで圧縮後の座標が返るようにしている
+    int operator()(T x) {
+        if (!initialized) init();//初期化されていない場合は初期化
+        return upper_bound(xs.begin(), xs.end(), x) - xs.begin() - 1;
+    }
+    //xs[i]でi番目の値が返るようにしている
+    T operator[](int i) {
+        if (!initialized) init();
+        return xs[i];
+    }
+    int size() {
+        if (!initialized) init();
+        return xs.size();
+    }
+};
+
+
+int op(int a, int b){return max(a,b);}
+int e(){return 0;}
+
 int main(){
     int n;
     cin >> n;
-
-    vector<ll> dp(n+1,INF);
-    dp[0] = 0;
+    vector<ll> a(n);
+    CC<ll> sa;
     rep(i,n){
-        ll a;
-        cin >> a;
-        int pos = lower_bound(dp.begin(),dp.end(),a) - dp.begin();
-        dp[pos] = a;
+        cin >> a[i];
+        sa.add(a[i]);
     }
 
-    for(int i=n; i>=0; i--)if(dp[i]!=INF){
-        cout << i << endl;
-        return 0;
+    int m = -1;
+    rep(i,n) m = max(m,sa(a[i]));
+    segtree<int,op,e> dp(m+1);
+    rep(i,n){
+        int na = sa(a[i]);
+        int nex = dp.prod(0,na);
+        int now = dp.get(na);
+        if(now<nex+1) dp.set(na,nex+1);
     }
+
+    int ans = dp.all_prod();
+    cout << ans << endl;
 }
