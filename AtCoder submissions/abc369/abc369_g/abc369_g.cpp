@@ -63,7 +63,7 @@ int main(){
             nf.insert(x+e.cost);
 
             if(f.size()<nf.size()) swap(f,nf);
-            f.merge(nf);
+            for(ll el : nf) f.insert(el);
         }
         f.insert(0);
         return f;
