@@ -46,8 +46,11 @@ int main(){
     unordered_map<ll,mint> dpsum;
     dpsum[0] = 1;
     repp(i,n){
+        // rep(j,i) dp[i] += dp[j];
         dp[i] += tot;
+        // rep(j,i) if(s[j]=s[i]) dp[i] -= dp[j];
         dp[i] -= dpsum[s[i]-k];
+        
         tot += dp[i];
         dpsum[s[i]] += dp[i];
     }
