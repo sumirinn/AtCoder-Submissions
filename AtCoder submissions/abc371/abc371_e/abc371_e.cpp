@@ -33,22 +33,25 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
 int main(){
-    ll n;
+    int n;
     cin >> n;
     vector<int> a(n);
     rep(i,n) cin >> a[i], a[i]--;
 
-    vector<vector<ll>> cnt(n);
+    vector<vector<int>> cnt(n);
     rep(i,n) cnt[a[i]].pb(i);
+    auto f =[&](ll x)->ll{return x*(x+1) / 2;};
 
     ll ans = 0;
     rep(i,n){
         int m = cnt[i].size();
         if(m==0) continue;
-        ll now = c2(n+1);
-        if(cnt[i][0]!=0) now -= c2(cnt[i][0]+1);
-        rep(j,m-1) now -= c2(cnt[i][j+1] - cnt[i][j]);
-        if(cnt[i][m-1]!=n-1) now -= c2(n-cnt[i][m-1]); 
+        ll now = f((ll)n);
+
+        if(cnt[i][0]!=0) now -= f((ll)cnt[i][0]);
+        rep(j,m-1) now -= f((ll)(cnt[i][j+1] - cnt[i][j]-1));
+        if(cnt[i][m-1]!=n-1) now -= f((ll)(n-cnt[i][m-1]-1)); 
+        
         ans += now;
     }
 
