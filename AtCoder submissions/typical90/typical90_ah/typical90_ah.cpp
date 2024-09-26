@@ -38,12 +38,11 @@ int main(){
     vector<int> a(n);
     rep(i,n) cin >> a[i];
 
-    int ans = 0;
+    int ans=0, r=0, s=0;
     map<ll,int> mp;
-    int r=0, s=0;
-    bool e = false;
+    bool fin = false;
     rep(l,n){
-        if(e) continue;
+        if(fin) break;
         if(l!=0){
             mp[a[l-1]]--;
             if(mp[a[l-1]]==0) s--;
@@ -59,7 +58,7 @@ int main(){
                 break;
             }
             if(r==n){
-                e = true;
+                fin = true;
                 break;
             }
         }
