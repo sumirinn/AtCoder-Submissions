@@ -45,7 +45,7 @@ int main(){
         cin >> l[i] >> r[i] >> s[i].fi;
         s[i].se = i;
     }
-    sort(s.rbegin(),s.rend());
+    //sort(s.rbegin(),s.rend());
 
     segtree<ll,op,e> t(w+1);
     rep(i,n){
