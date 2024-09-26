@@ -34,13 +34,13 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 int main(){
     const int s = 51;
-    const int t = 1500;
+    const int t = 1276;
     vector<vector<int>> g(s,vector<int>(t,0));
     rep(i,s)rep(j,t){
-        vector<int> mex(t,0);
-        if(i>=1) mex[g[i-1][j+i]] = 1;
-        if(j>=2) repp(k,j/2) mex[g[i][j-k]] = 1;
-        rep(k,t)if(mex[k]==0){
+        vector<bool> m(t,true);
+        if(i>=1) m[g[i-1][j+i]] = false;
+        if(j>=2) repp(k,j/2) m[g[i][j-k]] = false;
+        rep(k,t)if(m[k]){
             g[i][j] = k;
             break;
         }
