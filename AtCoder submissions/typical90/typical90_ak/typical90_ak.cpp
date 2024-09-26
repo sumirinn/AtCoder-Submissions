@@ -39,30 +39,22 @@ ll e(){return 0;}
 int main(){
     int w, n;
     cin >> w >> n;
-    vector<pli> s(n);
-    vector<int> l(n), r(n);
-    rep(i,n){
-        cin >> l[i] >> r[i] >> s[i].fi;
-        s[i].se = i;
-    }
-    //sort(s.rbegin(),s.rend());
+    segtree<ll,op,e> dp(w+1);
 
-    segtree<ll,op,e> t(w+1);
     rep(i,n){
-        ll v = s[i].fi;
-        int ni = s[i].se;
-        int nl=l[ni], nr=r[ni];
+        int l, r;
+        ll v;
+        cin >> l >> r >> v;
         for(int j=w; j>0; j--){
-            if(j-nl+1==0) break;
-            ll m = t.prod(max(0,j-nr),j-nl+1);
-            if(m==0 && j-nr>0) continue;
+            if(j-l+1==0) break;
+            ll m = dp.prod(max(0,j-r),j-l+1);
+            if(m==0 && j-r>0) continue;
             m += v;
-            ll now = t.get(j);
-            if(now<m) t.set(j,m);
+            ll now = dp.get(j);
+            if(now<m) dp.set(j,m);
         }
     }
 
-    ll ans = t.get(w);
-    if(ans==0) ans = -1;
-    cout << ans << endl;
+    if(dp.get(w)==0) dp.set(w,-1);
+    cout << dp.get(w) << endl;
 }
