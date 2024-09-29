@@ -50,14 +50,13 @@ int main(){
     vector<int> nex(mod);
     rep(i,mod) nex[i] = (i+f(i)) % mod;
 
-    vector<int> cnt(mod,0);
-    int pos=n, now=0;
-    while(!cnt[pos]){
-        cnt[pos] = now;
-        pos = nex[pos];
-        now++;
+    const int m = 60;
+    vector<vector<int>> d(m,vector<int>(mod,0));
+    rep(i,mod) d[0][i] = nex[i];
+    repp(s,m-1){
+        rep(i,mod) d[s][i] = d[s-1][d[s-1][i]];
     }
-    int cycle=now - cnt[pos];
-    if(k>=cnt[pos]) k = (k-cnt[pos])%cycle + cnt[pos];
-    rep(i,mod)if(cnt[i]==k) cout << i << endl;
+
+    rep(s,m)if(k&(ll)1<<s) n = d[s][n];
+    cout << n << endl;
 }
