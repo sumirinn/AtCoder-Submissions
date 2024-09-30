@@ -49,7 +49,7 @@ int main(){
     vector<ll> s(n+1,0);
     rep(i,n) s[i+1] = s[i] + a[i];
     ll remain = k;
-    rep(i,n) remain -= a[i];
+    remain -= s[n];
 
     map<int,ll> ans;
     rep(i,n){
