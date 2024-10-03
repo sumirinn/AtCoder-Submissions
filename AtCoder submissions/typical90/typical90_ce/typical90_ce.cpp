@@ -35,23 +35,23 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, m;
     cin >> n >> m;
-    vector<vector<int>> G(n);
+    vector<vector<int>> to(n);
     rep(i,m){
         int u, v;
         cin >> u >> v;
         u--; v--;
-        G[u].pb(v);
-        G[v].pb(u);
+        to[u].pb(v);
+        to[v].pb(u);
     }
 
-    int B = int(sqrt(2*m));
+    int b = int(sqrt(2*m));
     vector<int> l;
-    rep(i,n)if((int)G[i].size()>=B) l.pb(i);
+    rep(i,n)if(to[i].size()>=b) l.pb(i);
 
     int siz = l.size();
     vector<vector<bool>> link(n,vector<bool>(siz,false));
     rep(i,siz){
-        for(int j : G[l[i]]){
+        for(int j : to[l[i]]){
             link[j][i] = true;
         }
         link[l[i]][i] = true;
@@ -72,9 +72,9 @@ int main(){
         if(last==-1) cout << 1 << endl;
         else cout << y[last] << endl;
 
-        if((int)G[x].size()<B){
+        if(to[x].size()<b){
             upd[x] = i;
-            for(int j : G[x]) upd[j] = i;
+            for(int j : to[x]) upd[j] = i;
         }
         else{
             int ptr = find(l.begin(),l.end(),x) - l.begin();
