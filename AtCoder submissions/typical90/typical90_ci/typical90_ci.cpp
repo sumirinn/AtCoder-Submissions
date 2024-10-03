@@ -57,18 +57,21 @@ int main(){
         return cnt;
     };
 
-    auto f =[&](long long cnts) {
-	long long cl = 1, cr = 5000000000LL, cm, minx = 5000000000LL;
-	for (int i = 0; i < 40; i++) {
-		cm = (cl + cr) / 2LL;
-		int res = g(cm);
-		if (res <= cnts) { cr = cm; minx = min(minx, cm); }
-		else { cl = cm; }
+    auto f =[&](ll x) {
+	ll l=1, r=INF, minx = INF;
+	rep(i,61){
+		ll m = (l+r) / 2LL;
+		int res = g(m);
+		if (res<=x){
+            r = m; 
+            chmin(minx,m); 
+        }
+		else l = m;
 	}
 	return minx;
-};
+    };
 
     ll l=f(k), r=f(k-1);
-    if(r-l>=2000000000LL) cout << "Infinity" << endl;
+    if(r-l>=inf) cout << "Infinity" << endl;
     else cout << r - l << endl;
 }
