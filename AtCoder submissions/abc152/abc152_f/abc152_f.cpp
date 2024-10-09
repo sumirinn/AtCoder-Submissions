@@ -13,8 +13,8 @@ using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>;
 using pli = pair<ll, int>; using pil = pair<int, ll>;
 const int inf = 1001001001; 
 const ll INF = 1e18;
-//using mint = modint998244353;
-using mint = modint1000000007;
+using mint = modint998244353;
+//using mint = modint1000000007;
 //using mint = modint;
 //mint::set_mod(m);で定義できる
 //a,bが0だと使えないことに注意
@@ -51,44 +51,42 @@ int main(){
 
     int m;
     cin >> m;
-    vector<vector<int>> ks(m);
+    vector<vector<int>> cs(m);
     rep(i,m){
         int u, v;
         cin >> u >> v;
         u--; v--;
-        auto dfs =[&](auto dfs, int now, int pre)->int{
-            if(now==v) return inf;
+        auto dfs =[&](auto dfs, int now, int pre)->bool{
+            if(now==v) return true;
             for(int nex : to[now]){
                 if(nex==pre) continue;
-                int c = dfs(dfs,nex,now);
-                if(c==inf){
-                    ks[i].pb(es[now][nex]);
-                    return inf;
+                if(dfs(dfs,nex,now)){
+                    cs[i].pb(es[now][nex]);
+                    return true;
                 }
             }
-            return 0;
+            return false;
         };
         dfs(dfs,u,-1);
     }
 
     ll ans = 0;
-    int m2 = 1<<m;
-    rep(s,m2){
+    rep(s,1<<m){
         bool ok = true;
-        vector<bool> vs(n-1,false);
+        vector<bool> use(n-1,false);
         int cnt = 0;
         rep(i,m){
             if(s>>i&1){
-                for(int e : ks[i]){
-                    if(vs[e]==false){
+                for(int e : cs[i]){
+                    if(use[e]==false){
                         cnt++;
-                        vs[e] = true;
+                        use[e] = true;
                     }
                 }
             }
         }
-        int nc = (n-1) - cnt;
-        ll ncnt = (ll)1<<nc;
+
+        ll ncnt = (ll)1<<(n-1-cnt);
         if(__builtin_popcount(s)%2==0) ans += ncnt;
         else ans -= ncnt;
     }
