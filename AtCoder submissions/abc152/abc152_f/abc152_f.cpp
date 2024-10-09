@@ -53,11 +53,11 @@ int main(){
     cin >> m;
     vector<vector<int>> cs(m);
     rep(i,m){
-        int u, v;
-        cin >> u >> v;
-        u--; v--;
+        int st, gl;
+        cin >> st >> gl;
+        st--; gl--;
         auto dfs =[&](auto dfs, int now, int pre)->bool{
-            if(now==v) return true;
+            if(now==gl) return true;
             for(int nex : to[now]){
                 if(nex==pre) continue;
                 if(dfs(dfs,nex,now)){
@@ -67,20 +67,19 @@ int main(){
             }
             return false;
         };
-        dfs(dfs,u,-1);
+        dfs(dfs,st,-1);
     }
 
     ll ans = 0;
     rep(s,1<<m){
-        bool ok = true;
         vector<bool> use(n-1,false);
         int cnt = 0;
         rep(i,m){
             if(s>>i&1){
-                for(int e : cs[i]){
-                    if(use[e]==false){
+                for(int edge : cs[i]){
+                    if(use[edge]==false){
                         cnt++;
-                        use[e] = true;
+                        use[edge] = true;
                     }
                 }
             }
