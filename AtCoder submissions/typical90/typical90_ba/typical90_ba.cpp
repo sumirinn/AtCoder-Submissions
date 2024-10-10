@@ -1,70 +1,64 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 using namespace std;
-#include <atcoder/all>
-using namespace atcoder;
-#define rep(i, n) for (int i = 0; i < (n); i++)
-#define repp(i, n) for (int i = 1; i <= (n); i++)
-#define pb push_back
-#define eb emplace_back
-#define fi first
-#define se second
-using ll = long long; using db = double; using ull = unsigned long long;
-using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
-using pli = pair<ll, int>; using pil = pair<int, ll>;
-const int inf = 1001001001; 
-const ll INF = 1e18;
-using mint = modint998244353;
-//using mint = modint1000000007;
-//using mint = modint;
-//mint::set_mod(m);で定義できる
-//a,bが0だと使えないことに注意
-ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
-ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-ll c2(ll n) {return n*(n-1) / 2;} 
-ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-//using P = pair<db, int>;
-using C = complex<db>;
-void chmax(ll& x, ll y) {x = max(x, y);} 
-void chmin(ll& x, ll y) {x = min(x, y);}
-const int di[] = {1, 0, -1, 0};
-const int dj[] = {0, -1, 0, 1};
-const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
+// これ 16 回から減らすの厳しくないか　絶対 Diff 2800 あるだろこんなの
+int N;
+int idx[1609];
+int fib[16] = { 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597 };
 
-int ask(int pos){
-    cout << "? " << pos << endl;
-    int t;
-    cin >> t;
-    return t;
+int Ask(int pos) {
+	if (idx[pos] == -1) {
+		cout << "? " << pos << endl;
+		int t; cin >> t;
+		idx[pos] = t;
+		return t;
+	}
+	return idx[pos];
 }
 
+void solve() {
+	cin >> N;
 
-void solve(){
-    int n;
-    cin >> n;
-    if(n==1){
-        int ans = ask(1);
-        cout << "! " << ans << endl;
-        return;
-    }
+	int Answer = 0;
+	for (int i = 0; i <= N; i++) idx[i] = -1;
+	for (int i = N + 1; i <= 1600; i++) idx[i] = -i;
 
-    int ans = 0;
-    int l=1, r=n;
-    rep(i,11){
-        int m = (l+r) / 2;
-        int f0 = ask(m);
-        int fa = ask(m+1);
-        ans = max({ans,f0,fa});
-        if(f0<fa) l = m;
-        else r = m;
-    }
-    cout << "! " << ans << endl;
+	if (N <= 5) {
+		for (int i = 1; i <= N; i++) Answer = max(Answer, Ask(i));
+	}
+	else {
+		int cl = 0, cr = 1597, dl = 610, dr = 987;
+		int el = Ask(dl);
+		int er = Ask(dr);
+		Answer = max({ Answer, el, er });
+		if (el < er) { cl = dl; dl = dr; dr = -1; el = er; er = -1; }
+		else { cr = dr; dr = dl; dl = -1; er = el; el = -1; }
+
+		for (int i = 12; i >= 0; i--) {
+			if (dl == -1) {
+				dl = cl + fib[i];
+				el = Ask(dl);
+			}
+			else if (dr == -1) {
+				dr = cr - fib[i];
+				er = Ask(dr);
+			}
+			Answer = max({ Answer, el, er });
+			if (el < er) { cl = dl; dl = dr; dr = -1; el = er; er = -1; }
+			else { cr = dr; dr = dl; dl = -1; er = el; el = -1; }
+		}
+		for (int i = cl + 1; i <= cr - 1; i++) Answer = max(Answer, Ask(i));
+	}
+
+	cout << "! " << Answer << endl;
 }
 
-
-int main(){
-    int t;
-    cin >> t;
-    rep(ti,t) solve();
+int main() {
+	int T; cin >> T;
+	for (int i = 1; i <= T; i++) {
+		solve();
+	}
+	return 0;
 }
