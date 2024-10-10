@@ -43,16 +43,21 @@ int ask(int pos){
 void solve(){
     int n;
     cin >> n;
+    if(n==1){
+        int ans = ask(1);
+        cout << "! " << ans << endl;
+        return;
+    }
+
     int ans = 0;
-    int l=1, r=n+1;
-    rep(i,20){
-        int c1 = (l+l+r) / 3;
-        int d1 = ask(c1);
-        int c2 = (l+r+r) / 3;
-        int d2 = ask(c2);
-        ans = max({ans,d1,d2});
-        if(d1<d2) l = c1;
-        else r = c2;
+    int l=1, r=n;
+    rep(i,11){
+        int m = (l+r) / 2;
+        int f0 = ask(m);
+        int fa = ask(m+1);
+        ans = max({ans,f0,fa});
+        if(f0<fa) l = m;
+        else r = m;
     }
     cout << "! " << ans << endl;
 }
