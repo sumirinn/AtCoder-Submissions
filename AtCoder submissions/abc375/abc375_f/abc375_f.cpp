@@ -32,64 +32,66 @@ const int dx[] = {1, 1, 0, -1, -1, -1, 0, 1};
 const int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
 
+
 int main(){
-    int n, m, q;
-    cin >> n >> m >> q;
-    vector<tuple<int,int,ll>> edges;
-    rep(i,m){
+    int n, m;
+    cin >> n >> m;
+    int q;
+    cin >> q;
+    vector<vector<ll>> g(n,vector<ll>(n,INF));
+    vector<pii> id(m);
+    vector<ll> id2(m);
+    rep(mi,m){
         int u, v;
         ll w;
         cin >> u >> v >> w;
         u--; v--;
-        edges.eb(u,v,w);
+        g[u][v] = w;
+        g[v][u] = w;
+        id[mi] = pii(u,v);
+        id2[mi] = w;
     }
 
-    vector<bool> blocked(m);
-    vector<tuple<int,int,int>> qs;
-    rep(qi,q){
-        int type;
-        cin >> type;
-        if(type==1){
-            int i;
-            cin >> i;
-            i--;
-            blocked[i] = true;
-            qs.eb(type,i,-1);
+    vector<int> Q(q);
+    vector<int> x(q,inf),y(q,inf);
+    rep(i,q){
+        cin >> Q[i];
+        if(Q[i]==1){
+            cin >> x[i];
+            x[i]--;
+            auto [u,v] = id[x[i]];
+            g[u][v] = INF;
+            g[v][u] = INF;
         }
-        if(type==2){
-            int x, y;
-            cin >> x >> y;
-            x--; y--;
-            qs.eb(type,x,y);
+        if(Q[i]==2){
+            cin >> x[i] >> y[i];
+            x[i]--;
+            y[i]--;
         }
-    }
-
-    vector<vector<ll>> dist(n,vector<ll>(n,INF));
-    rep(i,n) dist[i][i] = 0;
-    rep(i,m)if(!blocked[i]){
-        auto [u,v,w] = edges[i];
-        dist[u][v] = dist[v][u] = w;
-    }
-    rep(k,n)rep(i,n)rep(j,n){
-        chmin(dist[i][j],dist[i][k]+dist[k][j]);
     }
 
     vector<ll> ans;
+    rep(i,n) g[i][i] = 0;
+    rep(k,n)rep(i,n)rep(j,n){
+        g[i][j] = min(g[i][j], g[i][k]+g[k][j]);
+    }
+
     for(int qi=q-1; qi>=0; qi--){
-        auto [type,x,y] = qs[qi];
-        if(type==1){
-            auto [u,v,w] = edges[x];
+        if(Q[qi]==2){
+            ll res = g[y[qi]][x[qi]];
+            if(res==INF) res = -1;
+            ans.pb(res); 
+        }
+        if(Q[qi]==1){
+            auto[u,v] = id[x[qi]];
+            ll w = id2[x[qi]];
             rep(i,n)rep(j,n){
-                chmin(dist[i][j],dist[i][u]+w+dist[v][j]);
-                chmin(dist[i][j],dist[i][v]+w+dist[u][j]);
+                g[i][j] = min(g[i][j],g[i][u]+w+g[v][j]);
+                g[i][j] = min(g[i][j],g[i][v]+w+g[u][j]);
             }
         }
-        if(type==2) ans.pb(dist[x][y]);
     }
 
     reverse(ans.begin(),ans.end());
-    for(ll val : ans){
-        if(val==INF) val = -1;
-        cout << val << endl;
-    }
+    for(ll z : ans) cout << z << endl;
 }
