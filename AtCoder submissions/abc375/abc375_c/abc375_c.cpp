@@ -37,54 +37,16 @@ int main(){
     cin >> n;
     vector<string> a(n);
     rep(i,n) cin >> a[i];
-
-    vector<vector<char>> b(n,vector<char>(n,'a'));
-    rep(s,n/2){
-        int ri = (s+1) % 4;
-        if(ri==0){
-            for(int i=s; i<=n-1-s; i++){
-                b[i][s] = a[i][s];
-                b[i][n-1-s] = a[i][n-1-s];
-            }
-            for(int j=s; j<=n-1-s; j++){
-                b[s][j] = a[s][j];
-                b[n-1-s][j] = a[n-1-s][j];
-            }
+    
+    vector<string> b = a;
+    rep(i,n)rep(j,n){
+        int ni=i, nj=j;
+        int k = min({ni+1,nj+1,n-ni,n-nj});
+        rep(ki,k){
+            swap(ni,nj);
+            nj = n-1 - nj;
         }
-        if(ri==1){
-            for(int i=s; i<=n-1-s; i++){
-                b[s][n-1-i] = a[i][s];
-                b[n-1-s][n-1-i] = a[i][n-1-s];
-            }
-            for(int j=s; j<=n-1-s; j++){
-                b[j][n-1-s] = a[s][j];
-                b[j][s] = a[n-1-s][j];
-            }
-        }
-        if(ri==2){
-            for(int i=s; i<=n-1-s; i++){
-                b[i][s] = a[n-1-i][n-1-s];
-                b[i][n-1-s] = a[n-1-i][s];
-            }
-            for(int j=s; j<=n-1-s; j++){
-                b[s][n-1-j] = a[n-1-s][j];
-                b[n-1-s][j] = a[s][n-1-j];
-            }
-        }
-        if(ri==3){
-            for(int i=s; i<=n-1-s; i++){
-                b[n-1-s][i] = a[i][s];
-                b[s][i] = a[i][n-1-s];
-            }
-            for(int j=s; j<=n-1-s; j++){
-                b[n-1-j][s] = a[s][j];
-                b[n-1-j][n-1-s] = a[n-1-s][j];
-            }
-        }
+        b[ni][nj] = a[i][j];
     }
-
-    rep(i,n){
-        rep(j,n) cout << b[i][j];
-        cout << endl;
-    }
+    rep(i,n) cout << b[i] << endl;
 }
