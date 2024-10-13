@@ -41,7 +41,7 @@ int main(){
     vector<string> b = a;
     rep(i,n)rep(j,n){
         int ni=i, nj=j;
-        int k = min({ni+1,nj+1,n-ni,n-nj});
+        int k = min({ni+1,nj+1,n-ni,n-nj})%4;
         rep(ki,k){
             swap(ni,nj);
             nj = n-1 - nj;
