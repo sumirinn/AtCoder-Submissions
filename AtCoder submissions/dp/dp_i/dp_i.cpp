@@ -3,20 +3,16 @@ using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < (n); i++)
-#define repb(i, n) for (int i = (n-1); i >= 0; i--)
 #define repp(i, n) for (int i = 1; i <= (n); i++)
-#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
-#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mkp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
-using pii = pair<int, int>; using pll = pair<ll, ll>;  
-using pdd = pair<double, double>; using pli = pair<ll, int>;
-using pil = pair<int, ll>;
-const int inf = 1001001001; const ll INF = 3e18;
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
+using pli = pair<ll, int>; using pil = pair<int, ll>;
+const int inf = 1001001001; 
+const ll INF = 1e18;
 //using mint = modint998244353;
 using mint = modint1000000007;
 //using mint = modint;
@@ -24,39 +20,34 @@ using mint = modint1000000007;
 //a,bが0だと使えないことに注意
 ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
 ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-ll c2(ll n) {return n*(n-1) / 2;} ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-using P = pair<ll, int>;
-using MP = map<int, vector<int>>;
-using C = complex<double>;
-C inC(){
-    double x, y; cin >> x >> y;
-    return C(x,y);
-}
-void chmax(int& x, int y) {x = max(x, y);} // change max
+ll c2(ll n) {return n*(n-1) / 2;} 
+ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
+//using P = pair<db, int>;
+using C = complex<db>;
+void chmax(int& x, int y) {x = max(x, y);} 
 void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
-const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-//97~122(a~z),65~90(A~Z)
+const int dx[] = {1, 1, 0, -1, -1, -1, 0, 1};
+const int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
 
 int main(){
     int n;
     cin >> n;
-    vector<double> p(n);
-    rep(i,n) cin >> p[i];
-
-    vector<vector<double>> dp(n+1,vector<double>(n+1));
-    dp[0][0] = 1;
-    rep(i,n)rep(j,n){
-        dp[i+1][j+1] += dp[i][j]*p[i];
-        dp[i+1][j] += dp[i][j]*(1-p[i]);
+    
+    vector<db> dp(n+1,0);
+    dp[0] = 1;
+    rep(i,n){
+        db p;
+        cin >> p;
+        vector<db> old(n+1);
+        swap(dp,old);
+        rep(j,n+1) dp[j] += old[j] * (1-p);
+        rep(j,n) dp[j+1] += old[j] * p; 
     }
 
-
-    double ans = 0;
-    rep(i,(n+1)/2) ans += dp[n][i];
-    ans = 1 - ans;
-    cout << setprecision(20) << fixed << ans << endl;
+    db ans = 0;
+    for(int i=(n+1)/2; i<=n; i++) ans += dp[i];
+    cout << fixed << setprecision(20) << ans << endl; 
 }
