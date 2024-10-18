@@ -3,20 +3,16 @@ using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < (n); i++)
-#define repb(i, n) for (int i = (n-1); i >= 0; i--)
 #define repp(i, n) for (int i = 1; i <= (n); i++)
-#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
-#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mkp make_pair
 #define fi first
 #define se second
 using ll = long long; using db = double; using ull = unsigned long long;
-using pii = pair<int, int>; using pll = pair<ll, ll>;  
-using pdd = pair<double, double>; using pli = pair<ll, int>;
-using pil = pair<int, ll>;
-const int inf = 1001001001; const ll INF = 3e18;
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
+using pli = pair<ll, int>; using pil = pair<int, ll>;
+const int inf = 1001001001; 
+const ll INF = 1e18;
 //using mint = modint998244353;
 //using mint = modint1000000007;
 using mint = modint;
@@ -24,25 +20,21 @@ using mint = modint;
 //a,bが0だと使えないことに注意
 ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
 ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-ll c2(ll n) {return n*(n-1) / 2;} ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-using P = pair<ll, int>;
-using MP = map<int, vector<int>>;
-using C = complex<double>;
-C inC(){
-    double x, y; cin >> x >> y;
-    return C(x,y);
-}
-void chmax(ll& x, ll y) {x = max(x, y);} // change max
+ll c2(ll n) {return n*(n-1) / 2;} 
+ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
+//using P = pair<db, int>;
+using C = complex<db>;
+void chmax(int& x, int y) {x = max(x, y);} 
 void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
-const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-//97~122(a~z),65~90(A~Z)
+const int dx[] = {1, 1, 0, -1, -1, -1, 0, 1};
+const int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
 
 int main(){
-    int n; ll m;
+    int n; 
+    ll m;
     cin >> n >> m;
     mint::set_mod(m);
     vector<vector<int>> to(n);
@@ -50,37 +42,37 @@ int main(){
         int u, v;
         cin >> u >> v;
         u--; v--;
-        to[u].push_back(v);
-        to[v].push_back(u);
+        to[u].pb(v);
+        to[v].pb(u);
     }
 
     vector<mint> dp(n);
-    auto dfs1 =[&](auto dfs1, int v, int p=-1)->void{
-        dp[v] = 1;
-        for(int u : to[v]){
-            if(u==p) continue;
-            dfs1(dfs1,u,v);
-            dp[v] *= dp[u]+1;
+    auto dfs1 =[&](auto dfs1, int now, int pre=-1)->void{
+        dp[now] = 1;
+        for(int nex : to[now]){
+            if(nex==pre) continue;
+            dfs1(dfs1,nex,now);
+            dp[now] *= dp[nex]+1;
         }
     };
 
     vector<mint> ans(n);
-    auto dfs2 =[&](auto dfs2, int v, int p=-1)->void{
-        ans[v] = 1;
-        for(int u : to[v]) ans[v] *= dp[u] + 1;
+    auto dfs2 =[&](auto dfs2, int now, int pre=-1)->void{
+        ans[now] = 1;
+        for(int nex : to[now]) ans[now] *= dp[nex] + 1;
 
-        int ns = to[v].size();
+        int ns = to[now].size();
         vector<mint> l(ns),r(ns);
-        rep(i,ns) l[i] = r[i] = dp[to[v][i]] + 1;
+        rep(i,ns) l[i] = r[i] = dp[to[now][i]] + 1;
         rep(i,ns-1) l[i+1] *= l[i];
         for(int i=ns-2; i>=0; i--) r[i] *= r[i+1];
 
-        rep(i,ns){
-            if(to[v][i]==p) continue;
-            dp[v] = 1;
-            if(i) dp[v] *= l[i-1];
-            if(i+1<ns) dp[v] *= r[i+1];
-            dfs2(dfs2,to[v][i],v);
+        rep(nex,ns){
+            if(to[now][nex]==pre) continue;
+            dp[now] = 1;
+            if(nex) dp[now] *= l[nex-1];
+            if(nex+1<ns) dp[now] *= r[nex+1];
+            dfs2(dfs2,to[now][nex],now);
         }
     };
 
