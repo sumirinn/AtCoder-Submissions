@@ -36,29 +36,25 @@ int main(){
     int n;
     cin >> n;
     vector<int> a(n);
-    vector<vector<int>> to_b(n);
+    vector<vector<int>> to(n);
     dsu uf(n);
     rep(i,n){
         cin >> a[i];
         a[i]--;
         uf.merge(i,a[i]);
-        to_b[a[i]].pb(i);
+        to[a[i]].pb(i);
     }
 
-    vector<bool> used(n);
     vector<int> on(n);
     vector<bool> cycle(n);
     vector<ll> ans(n);
     rep(i,n){
-        if(used[uf.leader(i)]) continue;
-        used[uf.leader(i)] = true;
+        if(ans[uf.leader(i)]) continue;
         int siz = 0;
         int cnt = 1;
         int ni = i;
         while(siz==0){
-            if(on[ni]!=0){
-                siz = cnt - on[ni];
-            }
+            if(on[ni]!=0) siz = cnt - on[ni];
             on[ni] = cnt;
             ni = a[ni];
             cnt++;
@@ -75,7 +71,7 @@ int main(){
         while(!q.empty()){
             int now = q.front();
             q.pop();
-            for(int nex : to_b[now]){
+            for(int nex : to[now]){
                 if(cycle[nex]) continue;
                 ans[nex] = ans[now] + 1;
                 q.push(nex);
