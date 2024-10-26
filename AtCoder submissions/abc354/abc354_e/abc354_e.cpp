@@ -35,30 +35,21 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n;
     cin >> n;
-    vector<ll> a(n), b(n);
+    vector<int> a(n), b(n);
     rep(i,n) cin >> a[i] >> b[i];
 
     int n2 = 1<<n;
-    vector<int> mem(n2,inf);
-    auto dfs =[&](auto dfs, int now)->bool{
-        if(mem[now]!=inf) return mem[now];
-        bool res = false;
-        rep(i,n)rep(j,n){
-            if(i==j) continue;
-            if((1&(now>>i))==0 || (1&(now>>j))==0) continue;
-            if(a[i]==a[j] || b[i]==b[j]){
-                int nex = now;
-                nex -= 1<<i;
-                nex -= 1<<j;
-                if(dfs(dfs,nex)==false) res = true; 
-            } 
+    vector<bool> dp(n2);
+    rep(s,n2){
+        bool now = false;
+        rep(i,n)rep(j,i)if(s>>i&1)if(s>>j&1){
+            if(a[i]==a[j]||b[i]==b[j]){
+                if(!dp[s-(1<<i)-(1<<j)]) now = true;
+            }
         }
-        return mem[now] = res;
-    };
+        dp[s] = now;
+    }
 
-    int st = 0;
-    rep(i,n) st |= 1<<i;
-    dfs(dfs,st);
-    if(mem[st]) cout << "Takahashi" << endl;
-    else cout << "Aoki" << endl; 
+    if(dp[n2-1]) cout << "Takahashi" << endl;
+    else cout << "Aoki" << endl;
 }
