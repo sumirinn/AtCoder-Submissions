@@ -25,7 +25,7 @@ ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
 //using P = pair<db, int>;
 using C = complex<db>;
 void chmax(ll& x, ll y) {x = max(x, y);} 
-void chmin(ll& x, ll y) {x = min(x, y);}
+void chmin(int& x, int y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
 const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
@@ -36,76 +36,31 @@ int main(){
     int n, m;
     cin >> n >> m;
     vector<vector<int>> to(n);
-    vector<vector<int>> bto(n);
-    scc_graph g(n);
-    rep(i,m){
+    vector<int> st;
+    rep(mi,m){
         int u, v;
         cin >> u >> v;
         u--; v--;
         to[u].pb(v);
-        bto[v].pb(u);
-        g.add_edge(u,v);
+        if(v==0) st.pb(u);
     }
 
-    auto d = g.scc();
-    int csiz = 0;
-    vector<bool> st(n,false);
-    for(auto es: d){
-        bool ok = false;
-        for(int e : es){
-            if(e==0) ok = true;
-        }
-        if(ok){
-            for(int e : es){
-                st[e]= true;
-            }
-            csiz = es.size();
-        }
-    }
-    int cnt = 0;
-    rep(i,n) if(st[i]) cnt++;
-    if(cnt==1){
-        cout << -1 << endl;
-        return 0;
-    }
-
-    vector<int> visited(n);
-    vector<int> dist(n, inf);
     queue<int> q;
+    vector<int> dist(n,inf);
     q.push(0);
     dist[0] = 0;
     while(!q.empty()){
-        int v = q.front();
+        int now = q.front();
         q.pop();
-        for(int u : to[v]){
-            if(dist[u]!=inf) continue;
-            if(st[u]==false) continue;
-            dist[u] = dist[v] + 1;
-            q.push(u);
-        }
-    }
-
-    vector<int> bvisited(n);
-    vector<int> bdist(n, inf);
-    queue<int> bq;
-    bq.push(0);
-    bdist[0] = 0;
-    while(!bq.empty()){
-        int v = bq.front();
-        bq.pop();
-        for(int u : bto[v]){
-            if(bdist[u]!=inf) continue;
-            if(st[u]==false) continue;
-            bdist[u] = bdist[v] + 1;
-            q.push(u);
+        for(int nex : to[now]){
+            if(dist[nex]!=inf) continue;
+            dist[nex] = dist[now] + 1;
+            q.push(nex);
         }
     }
 
     int ans = inf;
-    rep(i,n)if(st[i]){
-        if(i==0) continue;
-        ans = min(ans,dist[i]+bdist[i]);
-    }
-
+    for(int e : st) ans = min(ans,dist[e]+1);
+    if(ans==inf) ans = -1;
     cout << ans << endl;
 }
