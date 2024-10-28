@@ -37,17 +37,21 @@ int main(){
     cin >> L >> R;
     vector<pll> ans;
 
-    auto f =[&](auto f, ll l, ll r)->void{
-        if(L<=l && r<=R){
-            ans.eb(l,r);
-            return;
+    int i = 0;
+    while(L<R){
+        if(L&1){
+            ans.eb(L<<i, (L+1)<<i);
+            L++;
         }
-        ll c = (l+r)>>1;
-        if(L<c) f(f,l,c);
-        if(c<R) f(f,c,r);
-    };
-    f(f,0,1ll<<60);
-
+        if(R&1){
+            ans.eb((R-1)<<i, R<<i);
+            R--;
+        }
+        L>>=1;
+        R>>=1;
+        i++;
+    }
+    sort(ans.begin(),ans.end());
     cout << ans.size() << endl;
     for(auto [l,r] : ans) cout << l << " " << r << endl;
 }
