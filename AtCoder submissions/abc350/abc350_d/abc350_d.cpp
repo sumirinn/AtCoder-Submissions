@@ -36,18 +36,18 @@ int main(){
     int n, m;
     cin >> n >> m;
     dsu uf(n);
-    vector<vector<int>> to(n);
+    vector<int> res(n);
     rep(i,m){
         int u, v;
         cin >> u >> v;
         u--; v--;
-        to[u].pb(v);
-        to[v].pb(u);
+        res[v]++;
+        res[u]++;
         uf.merge(u,v);
     }
 
     ll ans = 0;
-    rep(i,n) ans += uf.size(i)-1 - to[i].size();
+    rep(i,n) ans += uf.size(i)-1 - res[i];
     ans /= 2;
     cout << ans << endl;
 }
