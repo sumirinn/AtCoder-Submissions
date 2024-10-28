@@ -33,20 +33,21 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
 int main(){
-    ll l, r;
-    cin >> l >> r;
-
+    ll L, R;
+    cin >> L >> R;
     vector<pll> ans;
-    while(l<r){
-        for(int i=60; i>=0; i--){
-            ll w = 1ll<<i;
-            if(l%w) continue;
-            if(r<l+w) continue;
-            ans.eb(l,l+w);
-            l += w;
-            break;
+
+    auto f =[&](auto f, ll l, ll r)->void{
+        if(L<=l && r<=R){
+            ans.eb(l,r);
+            return;
         }
-    }
+        ll c = (l+r)>>1;
+        if(L<c) f(f,l,c);
+        if(c<R) f(f,c,r);
+    };
+    f(f,0,1ll<<60);
+
     cout << ans.size() << endl;
-    for(auto[l,r] : ans) cout << l << " " << r << endl;
+    for(auto [l,r] : ans) cout << l << " " << r << endl;
 }
