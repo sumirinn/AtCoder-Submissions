@@ -4,137 +4,107 @@ using namespace std;
 using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < (n); i++)
 #define repp(i, n) for (int i = 1; i <= (n); i++)
-#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
-#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
 #define pb push_back
 #define eb emplace_back
-#define mp make_pair
 #define fi first
 #define se second
-using ll = long long; using db = double;
-using ull = unsigned long long;
-using pii = pair<int, int>; using pll = pair<ll, ll>;  
-using pdd = pair<double, double>; using pli = pair<ll, int>;
-using pil = pair<int, ll>;
-const int inf = 1001001001; const ll INF = 3e18;
+using ll = long long; using db = double; using ull = unsigned long long;
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
+using pli = pair<ll, int>; using pil = pair<int, ll>;
+const int inf = 1001001001; 
+const ll INF = 1e18;
 using mint = modint998244353;
 //using mint = modint1000000007;
+//using mint = modint;
+//mint::set_mod(m);で定義できる
 //a,bが0だと使えないことに注意
 ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
 ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-// res[i][c] := i 文字目以降で最初に文字 c が登場する index (存在しないときは n)
-//auto nex = calc_next で取得すると楽。
-vector<vector<int> > calc_next(const string &S) {
-    int N = (int)S.size();
-    vector<vector<int> > res(N+1, vector<int>(26, N));
-    for (int i = N-1; i >= 0; --i) {
-        for (int j = 0; j < 26; ++j) res[i][j] = res[i+1][j];
-        res[i][S[i]-'a'] = i;
-    }
-    return res;
-}
-ll c2(ll n) {return n*(n-1) / 2;}
+ll c2(ll n) {return n*(n-1) / 2;} 
 ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-using P = pair<string, int>;
-using MP = map<int, vector<int>>;
-using C = complex<double>;
-C inC(){
-    double x, y;
-    cin >> x >> y;
-    return C(x,y);
-}
-struct Edge {
-    int u, v;
-    ll w;
-    Edge(){}
-    Edge(int u, int v, ll w): u(u), v(v), w(w){}
-};
-void chmax(int& x, int y) {x = max(x, y);} // change max
+//using P = pair<db, int>;
+using C = complex<db>;
+void chmax(ll& x, ll y) {x = max(x, y);} 
 void chmin(int& x, int y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
 const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-//97~122(a~z),65~90(A~Z)
-
-
-struct Parser{
-    string s;
-    int si;
-
-    struct Node {
-        vector<int> to;
-        char c;
-        Node(char c=0): c(c){}
-    };
-
-    vector<Node> nodes;
-    int root;
-
-
-
-    void parse(){
-        si = 0;
-        root = expr();
-    }
-
-
-    int charNode(){
-        int v = nodes.size();
-        nodes.push_back(Node(s[si++]));
-
-        return v;
-    }
-
-
-    int expr(){
-        int v = nodes.size();
-        nodes.push_back(Node());
-        while(si<s.size()) {
-            if(s[si]==')') break;
-            if(s[si]=='('){
-                si++;
-                int u = expr();
-                nodes[v].to.push_back(u);
-                si++;
-            }
-            else{
-                int u = charNode();
-                nodes[v].to.push_back(u);
-            }
-        }
-
-        return v;
-    }
-
-
-    void dfs(int v, bool flip){
-        Node& node = nodes[v];
-        if(node.c){
-            char c = node.c;
-            if(!flip){
-                if(islower(c)) c = toupper(c);
-                else c = tolower(c);
-            }
-            cout << c;
-        }
-        else{
-            if(flip) reverse(node.to.begin(), node.to.end());
-            for(int u : node.to) dfs(u, !flip);
-        }
-    }
-
-
-    void output(){
-        dfs(root, false);
-        cout << endl;
-    }
-};
 
 
 int main(){
-    Parser p;
-    cin >> p.s;
-    p.parse();
-    p.output();
+    string s;
+    cin >> s;
+    int n = s.size();
+
+    int d = 0;
+    vector<bool> rev(n);
+    rep(i,n){
+        if(s[i]=='(') d++;
+        if(s[i]==')') d--;
+        if(d%2==1) rev[i] = true;
+    }
+
+    vector<int> rl(n);
+    map<int,int> mp;
+    rep(i,n){
+        if(s[i]=='('){
+            d++;
+            mp[d] = i;
+        }
+        if(s[i]==')'){
+            rl[i] = mp[d];
+            d--;
+        }
+    }
+
+    vector<int> lr(n);
+    for(int i=n-1; i>=0; i--){
+        if(s[i]==')'){
+            d++;
+            mp[d] = i;
+        }
+        if(s[i]=='('){
+            lr[i] = mp[d];
+            d--;
+        }
+    }
+
+
+    string ans = "";
+    auto f =[&](auto f, int l, int r, int type)->void{
+        if(type==0){
+            for(int i=l; i<=r; i++){
+                if(s[i]=='('){
+                    f(f,i+1,lr[i]-1,1);
+                    i = lr[i];
+                }
+                else{
+                    if(rev[i]){
+                        if(97<=s[i]) ans += (char)(s[i]-'a'+'A');
+                        else ans += (char)(s[i]+'a'-'A');
+                    }
+                    else ans += s[i];
+                }
+            }
+        }
+        if(type==1){
+            for(int i=r; i>=l; i--){
+                if(s[i]==')'){
+                    f(f,rl[i]+1,i-1,0);
+                    i = rl[i];
+                }
+                else{
+                    if(rev[i]){
+                        if(97<=s[i]) ans += (char)(s[i]-'a'+'A');
+                        else ans += (char)(s[i]+'a'-'A');
+                    }
+                    else ans += s[i];
+                }
+            }
+        }
+    };
+    f(f,0,n-1,0);
+
+    cout << ans << endl;
 }
