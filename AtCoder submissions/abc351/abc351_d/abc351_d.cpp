@@ -43,7 +43,7 @@ int main(){
                 int ni=i+di[v], nj=j+dj[v];
                 if(ni<0||nj<0||ni>=h||nj>=w) continue;
                 if(s[ni][nj]=='#') continue;
-                s[ni][nj] = '!';
+                s[ni][nj] = 'm';
             }
         }
     }
@@ -52,14 +52,15 @@ int main(){
     int n = h*w;
     dsu uf(n);
     vector<vector<int>> to(n);
+    auto id=[&](int i, int j){return i*w+j;};
     rep(i,h)rep(j,w){
         if(s[i][j]!='.') continue;
         rep(v,4){
             int ni=i+di[v], nj=j+dj[v];
             if(ni<0||nj<0||ni>=h||nj>=w) continue;
             if(s[ni][nj]!='.') continue;
-            to[i*w+j].push_back(ni*w+nj);
-            uf.merge(i*w+j,ni*w+nj);
+            to[id(i,j)].push_back(id(ni,nj));
+            uf.merge(id(i,j),id(ni,nj));
         }
     }
 
@@ -68,7 +69,7 @@ int main(){
 
     rep(i,h)rep(j,w){
         if(s[i][j]!='.') continue;
-        int start = uf.leader(i*w+j);
+        int start = uf.leader(id(i,j));
         if(used[start]) continue;
         used[start] = true;
         set<int> cnt;
@@ -78,7 +79,7 @@ int main(){
             rep(d,4){
                 int ni=ii+di[d], nj=jj+dj[d];
                 if(ni<0||nj<0||ni>=h||nj>=w) continue;
-                if(s[ni][nj]=='!') cnt.insert(ni*w+nj);
+                if(s[ni][nj]=='m') cnt.insert(id(ni,nj));
             }
             for(int u : to[v]){
                 if(visited[u]) continue;
