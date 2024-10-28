@@ -70,8 +70,11 @@ int main(){
         }
     }
 
-
     string ans = "";
+    auto change =[&](char c){
+        if(97<=c) return c - 'a' + 'A';
+        else return c - 'A' + 'a';
+    };
     auto f =[&](auto f, int l, int r, int type)->void{
         if(type==0){
             for(int i=l; i<=r; i++){
@@ -80,10 +83,7 @@ int main(){
                     i = lr[i];
                 }
                 else{
-                    if(rev[i]){
-                        if(97<=s[i]) ans += (char)(s[i]-'a'+'A');
-                        else ans += (char)(s[i]+'a'-'A');
-                    }
+                    if(rev[i]) ans += change(s[i]);
                     else ans += s[i];
                 }
             }
@@ -95,10 +95,7 @@ int main(){
                     i = rl[i];
                 }
                 else{
-                    if(rev[i]){
-                        if(97<=s[i]) ans += (char)(s[i]-'a'+'A');
-                        else ans += (char)(s[i]+'a'-'A');
-                    }
+                    if(rev[i]) ans += change(s[i]);
                     else ans += s[i];
                 }
             }
