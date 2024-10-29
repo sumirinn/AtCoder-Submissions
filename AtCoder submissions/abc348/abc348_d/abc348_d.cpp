@@ -39,12 +39,12 @@ int main(){
     rep(i,h) cin >> a[i];
     int n;
     cin >> n;
-    map<pii,int> mp;
+    vector<vector<int>> ep(h,vector<int>(w,0));
     rep(i,n){
         int r, c, e;
         cin >> r >> c >> e;
         r--; c--;
-        mp[pii(r,c)] = e;
+        ep[r][c] = e;
     }
 
     int sx, sy;
@@ -62,9 +62,9 @@ int main(){
 
     using P = pair<int,pii>;
     priority_queue<P> q;
-    q.push(P(mp[pii(sx,sy)],pii(sx,sy)));
+    q.push(P(ep[sx][sy],pii(sx,sy)));
     vector<vector<int>> es(h,vector<int>(w,-1));
-    es[sx][sy] = mp[pii(sx,sy)];
+    es[sx][sy] = ep[sx][sy];
     while(!q.empty()){
         auto [e,r] = q.top();
         auto [i,j] = r;
@@ -75,9 +75,9 @@ int main(){
             if(ni<0||nj<0||ni>=h||nj>=w) continue;
             if(a[ni][nj]=='#') continue;
             if(es[ni][nj]>=e-1) continue;
-            int ne = max(e-1,mp[pii(ni,nj)]);
+            int ne = max(e-1,ep[ni][nj]);
             es[ni][nj] = ne;
-            mp[pii(ni,nj)] = 0;
+            ep[ni][nj] = 0;
             q.push(P(ne,pii(ni,nj)));
         }
     }
