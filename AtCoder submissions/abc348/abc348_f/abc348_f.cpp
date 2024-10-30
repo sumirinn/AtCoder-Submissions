@@ -43,11 +43,10 @@ int main(){
     rep(k,m){
         map<int,vector<int>> is;
         rep(i,n) is[a[i][k]].pb(i);
-        BS x;
         for(auto p : is){
+            BS x;
             for(int i : p.second) x[i] = 1;
             for(int i : p.second) d[i] ^= x;
-            for(int i : p.second) x[i] = 0;
         }
     }
 
