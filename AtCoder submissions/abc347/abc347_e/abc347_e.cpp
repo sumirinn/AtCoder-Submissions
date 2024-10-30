@@ -49,14 +49,13 @@ int main(){
         if(in[x]==-1){
             in[x] = i;
             cnt++;
-            siz[i] = cnt;
         }
         else{
             a[x] += siz[i-1] - siz[in[x]-1];
-            cnt--;
-            siz[i] = cnt;
             in[x] = -1;
+            cnt--;
         }
+        siz[i] = cnt;
         siz[i] += siz[i-1];
     }
 
