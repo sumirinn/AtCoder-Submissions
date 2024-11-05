@@ -52,27 +52,28 @@ int main(){
         if(to[i].size()!=3){
             continue;
         }
-        vector<int> es;
-        es.pb(i);
+
+        vector<int> v;
+        v.pb(i);
         auto dfs =[&](auto dfs, int now, int pre)->void{
             for(int nex : to[now]){
                 if(used[nex]) continue;
-                used[nex] = true;
                 if(nex==pre) continue;
+                used[nex] = true;
                 if(to[nex].size()!=3) continue;
-                es.pb(nex);
+                v.pb(nex);
                 dfs(dfs,nex,now);
             }
         };
         dfs(dfs,i,-1);
-        vs.pb(es);
+        vs.pb(v);
     }
 
     ll ans = 0;
     for(auto v : vs){
         ll cnt = 0;
         for(int now : v){
-            for(int nex : to[now]) if(to[nex].size()==2) cnt++;
+            for(int nex : to[now])if(to[nex].size()==2) cnt++;
         }
         ans += c2(cnt);
     }
