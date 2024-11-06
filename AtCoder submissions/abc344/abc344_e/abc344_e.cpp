@@ -1,94 +1,93 @@
 #include <bits/stdc++.h>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <stack>
-#include <set>
-#include <map>
-#include <queue>
 using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
-
-#define rep(i, n) for (int i = 0; i < (int)(n); i++)
-#define repp(i, n) for (int i = 1; i <= (int)(n); i++)
-using ll = long long;
-using MP = map<int, vector<int>>;
+#define rep(i, n) for (int i = 0; i < (n); i++)
+#define repp(i, n) for (int i = 1; i <= (n); i++)
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+using ll = long long; using db = double; using ull = unsigned long long;
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
+using pli = pair<ll, int>; using pil = pair<int, ll>;
+const int inf = 1001001001; 
+const ll INF = 1e18;
 using mint = modint998244353;
-using P = pair<ll, int>;
-void chmax(ll& x, ll y) {x = max(x, y);} // change max
-void chmin(int& x, int y) {x = min(x, y);}
+//using mint = modint1000000007;
+//using mint = modint;
+//mint::set_mod(m);で定義できる
+//a,bが0だと使えないことに注意
+ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
+ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
+ll c2(ll n) {return n*(n-1) / 2;} 
+ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
+//using P = pair<db, int>;
+using C = complex<db>;
+void chmax(ll& x, ll y) {x = max(x, y);} 
+void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
 const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-const int inf = 1001001001;
-const ll INF = 1e18;
-ll c2(ll n) {return n*(n-1) / 2;}
-ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
-ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-//97~122(a~z),65~90(A~Z)
 
 
 int main(){
     int n;
     cin >> n;
     vector<ll> a(n);
-    rep(i, n) cin >> a[i];
+    rep(i,n) cin >> a[i];
 
-    ll A = a[0], B = a[n-1];
-    int cnt = n;
-    map<ll, ll> mp, mpb;
-    rep(i, n-1) mp[a[i]] = a[i+1];
-    rep(i, n-1) mpb[a[n-1-i]] = a[n-1-i-1];
+    int st=a[0], gl=a[n-1];
+    map<ll,ll> f, b;
+    rep(i,n){
+        if(i!=n-1) f[a[i]] = a[i+1];
+        if(i!=0) b[a[i]] = a[i-1];
+    }
 
     int q;
     cin >> q;
-    rep(qi, q){
+    rep(qi,q){
         int t;
         cin >> t;
         if(t==1){
             ll x, y;
             cin >> x >> y;
-            cnt++;
-            if(x==B){
-                mp[x] = y;
-                B = y;
-                mpb[B] = x;
+            if(x==gl){
+                f[x] = y;
+                b[y] = x;
+                gl = y;
             }
             else{
-                ll k = mp[x];
-                mp[x] = y;
-                mp[y] = k;
-                mpb[k] = y;
-                mpb[y] = x;
+                ll nex = f[x];
+                f[x] = y;
+                f[y] = nex;
+                b[nex] = y;
+                b[y] = x;
             }
         }
         if(t==2){
             ll x;
             cin >> x;
-            cnt--;
-            if(A==x){
-                A = mp[x];
+            if(x==st){
+                st = f[x];
             }
-            if(B==x){
-                B = mpb[x];
+            if(x==gl){
+                gl = b[x];
             }
-            else{
-                ll b = mpb[x];
-                ll f = mp[x];
-                mp[b] = f;
-                mpb[f] = b;
+            else {
+                ll nex = f[x];
+                ll pre = b[x];
+                f[pre] = nex;
+                b[nex] = pre;
             }
         }
     }
-    
-    ll ans = A;
-    cout << ans << " ";
-    rep(i, cnt-1){
-        ans = mp[ans];
-        cout << ans << " ";
+
+    while(true){
+        cout << st << " ";
+        if(st==gl) break;
+        st = f[st];
     }
     cout << endl;
 }
