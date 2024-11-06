@@ -1,73 +1,63 @@
 #include <bits/stdc++.h>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <stack>
-#include <set>
-#include <map>
-#include <queue>
 using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
-
-#define rep(i, n) for (int i = 0; i < (int)(n); i++)
-#define repp(i, n) for (int i = 1; i <= (int)(n); i++)
-using ll = long long;
-using MP = map<int, vector<int>>;
+#define rep(i, n) for (int i = 0; i < (n); i++)
+#define repp(i, n) for (int i = 1; i <= (n); i++)
+#define pb push_back
+#define eb emplace_back
+#define fi first
+#define se second
+using ll = long long; using db = double; using ull = unsigned long long;
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
+using pli = pair<ll, int>; using pil = pair<int, ll>;
+const int inf = 1001001001; 
+const ll INF = 1e18;
 using mint = modint998244353;
-using P = pair<ll, int>;
-void chmax(ll& x, ll y) {x = max(x, y);} // change max
-void chmin(int& x, int y) {x = min(x, y);}
+//using mint = modint1000000007;
+//using mint = modint;
+//mint::set_mod(m);で定義できる
+//a,bが0だと使えないことに注意
+ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
+ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
+ll c2(ll n) {return n*(n-1) / 2;} 
+ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
+//using P = pair<db, int>;
+using C = complex<db>;
+void chmax(ll& x, ll y) {x = max(x, y);} 
+void chmin(ll& x, ll y) {x = min(x, y);}
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
 const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-const int inf = 1001001001;
-const ll INF = 1e18;
-ll c2(ll n) {return n*(n-1) / 2;}
-ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
-ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-//97~122(a~z),65~90(A~Z)
 
-
-int dp[109][109];
 
 int main(){
     string t;
-    cin >> t;
-    int m = t.size();
     int n;
-    cin >> n;
-    vector<int> a(n);
-    vector<vector<string>> s(n);
-    rep(i, n){
-        cin >> a[i];
-        rep(j, a[i]){
-            string S;
-            cin >> S;
-            s[i].push_back(S);
-        }
-    }
+    cin >> t >> n;
+    int m = t.size();
 
-    rep(i, 102)rep(j,102) dp[i][j] = inf;
-    rep(i, n) dp[i][0] = 0;
-    repp(i, n){
-        rep(j,m+1)  chmin(dp[i][j], dp[i-1][j]);
-        for(string nex : s[i-1]){
-            rep(j, m){
-                if(j+nex.size()>m) break;
-                if(dp[i-1][j]==inf) continue;
+    vector<int> dp(m+1,inf);
+    dp[0] = 0;
+    rep(i,n){
+        int a;
+        cin >> a;
+        vector<int> pre(m+1,inf);
+        rep(j,m+1) pre[j] = dp[j];
+        rep(j,a){
+            string s;
+            cin >> s;
+            int siz = s.size();
+            rep(k,m){
+                if(m<k+siz-1) continue;
                 bool ok = true;
-                rep(c, nex.size()) if(t[j+c]!=nex[c]){
-                    ok = false;
-                    //cout << i << " " << j << " " <<  c << endl;
-                }
-                if(ok) chmin(dp[i][j+nex.size()], dp[i-1][j] + 1); 
+                rep(l,siz) if(t[k+l]!=s[l]) ok = false;
+                if(ok) dp[k+siz] = min(dp[k+siz],pre[k] + 1);
             }
         }
     }
 
-    if(dp[n][m]==inf) dp[n][m] = -1;
-    cout << dp[n][m] << endl;
+    if(dp[m]==inf) dp[m] = -1;
+    cout << dp[m] << endl;
 }
