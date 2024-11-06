@@ -43,8 +43,7 @@ int main(){
     rep(i,n){
         int a;
         cin >> a;
-        vector<int> pre(m+1,inf);
-        rep(j,m+1) pre[j] = dp[j];
+        auto pre = dp;
         rep(j,a){
             string s;
             cin >> s;
