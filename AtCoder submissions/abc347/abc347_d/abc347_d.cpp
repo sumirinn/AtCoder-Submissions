@@ -1,93 +1,87 @@
+#ifndef ONLINE_JUDGE
+#define _GLIBCXX_DEBUG//[]で配列外参照をするとエラーにしてくれる。上下のやつがないとTLEになるので注意 ABC311Eのサンプル4みたいなデバック中のTLEは防げないので注意
+#endif
 #include <bits/stdc++.h>
 using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
-#define rep(i, n) for (int i = 0; i < (n); i++)
-#define repp(i, n) for (int i = 1; i <= (n); i++)
-#define rep2(i, a, b) for(int i = (a); i <= (b); i++)
-#define rep3(i, a, b, c) for(int i = (a); i <= (b); i+=(c))
-using ll = long long; using pii = pair<int, int>;
-using pll = pair<ll, ll>;  using pdd = pair<double, double>;
-const int inf = 1001001001; const ll INF = 3e18;
+template<typename T> using vc = vector<T>;
+template<typename T> using vv = vc<vc<T>>;
+using ll = long long;
+const int inf = 1001001001; 
+const ll INF = 2e18;
+using db = double; 
+using ull = unsigned long long;
+using ld = long double; 
+using bl = bool;
 using mint = modint998244353;
 //using mint = modint1000000007;
-//a,bが0だと使えないことに注意
+//using mint = modint; //mint::set_mod(m);で定義できる
+template<class T> using pq = priority_queue<T, vc<T>>;//大きい順
+template<class T> using pq_g = priority_queue<T, vc<T>, greater<T>>;//小さい順
+using vi = vc<int>; using vvi = vv<int>; using vvvi = vv<vi>; using vvvvi = vv<vvi>;
+using vl = vc<ll>; using vvl = vv<ll>; using vvvl = vv<vl>; using vvvvl = vv<vvl>;
+using vb = vc<bl>; using vvb = vv<bl>; using vvvb = vv<vb>;
+using vdb = vc<db>; using vvdb = vv<db>; using vvvdb = vv<vdb>;
+using vld = vc<ld>; using vvld = vv<ld>; using vvvld = vv<vld>;
+using vs = vc<string>; using vvs = vv<string>;
+using ar2 = array<ll, 2>;
+#define rep(i,n) for(ll i=0; i<(n); i++)
+#define repp(i,n) for(ll i=1; i<=(n); i++)
+#define drep(i,n) for(ll i=(n)-1; i>=0; i--)
+#define nfor(i,s,n) for(ll i=s; i<n; i++)//i=s,s+1...n-1 ノーマルfor
+#define dfor(i,s,n) for(ll i = (s)-1; i>=n;i--)//s-1スタートでnまで落ちる
+#define nall(a) a.begin(),a.end()
+#define rall(a) a.rbegin(),a.rend()
+void chmax(ll& x, ll y) {x = max(x, y);}
+void chmin(ll& x, ll y) {x = min(x, y);}
+#define pb push_back
+#define eb emplace_back
+#define em emplace
+#define pob pop_back
+#define YES cout << "Yes" << endl;
+#define NO cout << "No" << endl;
+#define YN {cout << "Yes" << endl;}else{cout << "No" << endl;}
+#define vc_unique(v) v.erase( unique(v.begin(), v.end()), v.end() );
+#define vc_rotate(v) rotate(v.begin(),v.begin()+1,v.end());
+#define next_p(v) next_permutation(v.begin(),v.end())
+bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
+    return (!(0 <= i && i < h && 0 <= j && j < w));
+}
+#define vvl_kaiten(v) {ll n = size(v);vvl nx(n,vl(n));rep(i,n)rep(j,n)nx[j][n-i-1]=v[i][j];swap(nx,v);}//時計回りに90°回転
+//#define vvl_kaiten(v) {ll n = size(v);vvl nx(n,vl(n));rep(i,n)rep(j,n)nx[n-j-1][i]=v[i][j];swap(nx,v);}//反時計周りに90°回転
+#define vs_kaiten(v) {ll n = size(v);vs nx(n,string(n,'.'));rep(i,n)rep(j,n)nx[j][n-i-1]=v[i][j];swap(nx,v);}//文字列版 時計回りに90°回転
+//#define vs_kaiten(v) {ll n = size(v);vs nx(n,string(n,'.'));rep(i,n)rep(j,n)nx[n-j-1][i]=v[i][j];swap(nx,v);}//文字列版　反時計周りに90°回転
+#define vvl_tenti(v) {ll n = size(v);vvl nx(n,vl(n));rep(i,n)rep(j,n)nx[j][i]=v[i][j];swap(nx,v);}
+#define vs_tenti(v) {ll n = size(v); vs nx(n, string(n,'.')); rep(i, n)rep(j, n)nx[j][i] = v[i][j]; swap(nx, v);}
 ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
 ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-// res[i][c] := i 文字目以降で最初に文字 c が登場する index (存在しないときは n)
-//auto nex = calc_next で取得すると楽。
-vector<vector<int> > calc_next(const string &S) {
-    int N = (int)S.size();
-    vector<vector<int> > res(N+1, vector<int>(26, N));
-    for (int i = N-1; i >= 0; --i) {
-        for (int j = 0; j < 26; ++j) res[i][j] = res[i+1][j];
-        res[i][S[i]-'a'] = i;
-    }
-    return res;
-}
-//comb(n,k)でnCkになる。
-struct modinv {
-    int n; vector<mint> d;
-    modinv(): n(2), d({0,1}) {}
-    mint operator()(int i) {
-    while (n <= i) d.push_back(-d[mint::mod()%n]*(mint::mod()/n)), ++n;
-    return d[i];
-    }
-    mint operator[](int i) const { return d[i];}
-} invs;
-struct modfact {
-    int n; vector<mint> d;
-    modfact(): n(2), d({1,1}) {}
-    mint operator()(int i) {
-    while (n <= i) d.push_back(d.back()*n), ++n;
-    return d[i];
-    }
-    mint operator[](int i) const { return d[i];}
-} facts;
-struct modfactinv {
-    int n; vector<mint> d;
-    modfactinv(): n(2), d({1,1}) {}
-    mint operator()(int i) {
-    while (n <= i) d.push_back(d.back()*invs(n)), ++n;
-    return d[i];
-    }
-    mint operator[](int i) const { return d[i];}
-} ifacts;
-mint comb(int n, int k) {
-    if (n < k || k < 0) return 0;
-    return facts(n)*ifacts(k)*ifacts(n-k);
-}
-//素数判定  
-bool isPrime(int x){
-    for(int i=2; i*i<=x; i++) if(x%i==0) return false;
-    return true;
-}
-ll c2(ll n) {return n*(n-1) / 2;}
+ll c2(ll n) {return n*(n-1) / 2;} 
 ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-using P = pair<ll, int>;
-using MP = map<int, vector<int>>;
-void chmax(double& x, double y) {x = max(x, y);} // change max
-void chmin(ll& x, ll y) {x = min(x, y);}
+#define vc_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<endl;}//一次元配列を出力する
+#define vv_cout(v){ll n = size(v);rep(i,n){rep(j,size(v[i])){cout<<v[i][j]<<' ';}cout<<endl;}}//二次元配列を出力する
+#define fi first
+#define se second
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
+using pli = pair<ll, int>; using pil = pair<int, ll>;
+using vmint = vc<mint>; using vvmint = vv<mint>; using vvvmint = vv<vmint>;
+template<class T>istream& operator>>(istream& i, vc<T>& v) { rep(j, size(v))i >> v[j]; return i; }
+using P = pair<db, int>;
 const int di[] = {1, 0, -1, 0};
 const int dj[] = {0, -1, 0, 1};
 const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-//97~122(a~z),65~90(A~Z)
 
-const int m = 60;
 
-ll tos(vector<int> x){
-    ll res = 0;
-    rep(i,m) res |= (ll)x[i]<<i;
-    return res;
-}
 int main(){
-    ll a, b, c;
+    const int m = 60;
+    int a, b;
+    ll c;
     cin >> a >> b >> c;
-    ll one = __builtin_popcountll(c);
-    ll zero = 60 - one;
-    
-    ll d = a + b - one;
+    int one = __builtin_popcountll(c);
+    int zero = m - one;
+
+    int d = a+b-one;
     if(d<0 || d%2==1){
         cout << -1 << endl;
         return 0;
@@ -100,15 +94,17 @@ int main(){
         cout << -1 << endl;
         return 0;
     }
-    vector<int> x(m), y(m);
-    vector<int> i0, i1;
-    rep(i,60){
-        if(c>>i&1) i1.push_back(i);
-        else i0.push_back(i);
+
+    vl x(m,0), y(m,0);
+    vi i0, i1;
+    rep(i,m){
+        if(c>>i&1) i1.pb(i);
+        else i0.pb(i);
     }
     rep(j,d){
         int i = i0[j];
-        x[i] = y[i] = 1;
+        x[i] = 1;
+        y[i] = 1;
     }
     rep(j,one){
         int i = i1[j];
@@ -116,5 +112,10 @@ int main(){
         else y[i] = 1;
     }
 
+    auto tos =[&](vector<ll> v){
+        ll res = 0;
+        rep(i,m) res |= v[i]<<i;
+        return res;
+    };
     cout << tos(x) << " " << tos(y) << endl;
 }
