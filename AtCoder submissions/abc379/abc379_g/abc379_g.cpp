@@ -85,17 +85,18 @@ int main(){
         swap(ns,s);
     }
 
-    map<vi,mint> dp;
-    dp[vi(w)] = 1;
+    using A = array<int,14>;
+    map<A,mint> dp;
+    dp[A()] = 1;
     rep(i,h)rep(j,w){
-        map<vi,mint> old;
+        map<A,mint> old;
         swap(dp,old);
         for(auto [a,num] : old){
             repp(d,3){
                 if(s[i][j]!='0'+d && s[i][j]!='?') continue;
                 if(a[j]==d) continue;
                 if(j && a[j-1]==d) continue;
-                vi na = a;
+                A na = a;
                 na[j] = d;
                 dp[na] += num;
             }
