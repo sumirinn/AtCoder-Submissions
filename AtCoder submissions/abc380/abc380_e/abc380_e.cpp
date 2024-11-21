@@ -73,55 +73,50 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, q;
     cin >> n >> q;
-    vector<int> cnt(n,1), col(n);
-    rep(i,n) col[i] = i;
-    vector<int> l(n), r(n);
-    rep(i,n){
-        l[i] = i;
-        r[i] = i;
-    }
-    dsu uf(n);
 
-    vector<int> ans;
+    vector<int> cnt(n+2,1);
+    dsu uf(n+2);
+    vector<int> l(n+2), r(n+2), col(n+2);
+    rep(i,n+2) l[i] = r[i] = col[i] = i;
     rep(qi,q){
-        int T;
-        cin >> T;
-        if(T==1){
+        int type;
+        cin >> type;
+        if(type==1){
             int x, c;
             cin >> x >> c;
-            x--; c--;
-            int lead = uf.leader(x);
-            int ncol = col[lead];
-            col[lead] = c;
-            cnt[ncol] -= uf.size(x);
-            cnt[c] += uf.size(x);
+            x = uf.leader(x);
+            int siz = uf.size(x);
 
-            int L = l[lead], R=r[lead];
-            if(L!=0){
-                int llead = uf.leader(L-1);
-                if(col[llead]==c){
-                    L = l[llead];
-                    uf.merge(llead,lead);
-                }
+            cnt[col[x]] -= siz;
+            col[x] = c;
+            cnt[col[x]] += siz;
+
+            int li = uf.leader(l[x]-1);
+            if(col[li]==c){
+                int nl = l[li];
+                int nr = r[x];
+                uf.merge(li,x);
+                x = uf.leader(x);
+                l[x] = nl;
+                r[x] = nr;
+                col[x] = c;
             }
-            if(R!=n-1){
-                int rlead = uf.leader(R+1);
-                if(col[rlead]==c){
-                    R = r[rlead];
-                    uf.merge(rlead,lead);
-                }
+
+            int ri = uf.leader(r[x]+1);
+            if(col[ri]==c){
+                int nl = l[x];
+                int nr = r[ri];
+                uf.merge(ri,x);
+                x = uf.leader(x);
+                l[x] = nl;
+                r[x] = nr;
+                col[x] = c;
             }
-            lead = uf.leader(x);
-            l[lead] = L;
-            r[lead] = R;
         }
-        if(T==2){
+        if(type==2){
             int c;
             cin >> c;
-            c--;
-            ans.pb(cnt[c]);
+            cout << cnt[c] << endl;
         }
     }
-
-    for(int x : ans) cout << x << endl;
 }
