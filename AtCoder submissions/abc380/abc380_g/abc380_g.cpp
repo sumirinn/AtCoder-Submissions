@@ -93,17 +93,13 @@ int main(){
     {
         fenwick_tree<int> t(n);
         ll now = 0;
-        queue<int> q;
         rep(i,n){
             now += t.sum(p[i],n);
             t.add(p[i],1);
-            q.push(i);
-            if(q.size()==k){
+            if(i>=k-1){
                 ans += now;
-                int j = q.front();
-                q.pop();
-                t.add(p[j],-1);
-                now -= t.sum(0,p[j]);
+                t.add(p[i-k+1],-1);
+                now -= t.sum(0,p[i-k+1]);
             }
         }
     }
