@@ -93,12 +93,16 @@ int main(){
         int rv = uf.leader(v);
         uf.merge(u,v);
         int new_root = uf.leader(u);
+        ll vab = min(cnt_a[ru],cnt_b[rv]);
+        ans += w*vab;
+        cnt_a[ru] -= vab;
+        cnt_b[rv] -= vab;
+        ll vba = min(cnt_a[rv],cnt_b[ru]);
+        ans += w*vba;
+        cnt_a[rv] -= vba;
+        cnt_b[ru] -= vba;
         cnt_a[new_root] = cnt_a[ru] + cnt_a[rv];
         cnt_b[new_root] = cnt_b[ru] + cnt_b[rv];
-        ll vs = min(cnt_a[new_root],cnt_b[new_root]);
-        ans += w*vs;
-        cnt_a[new_root] -= vs;
-        cnt_b[new_root] -= vs;
     }
     cout << ans << endl;
 }
