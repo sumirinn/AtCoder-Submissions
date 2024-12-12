@@ -74,14 +74,13 @@ int main(){
         edges[i] = {w,u,v};
     }
     sort(nall(edges));
-    vector<int> a(k), b(k);
-    rep(i,k) cin >> a[i];
-    rep(i,k) cin >> b[i];
-
-    vector<ll> cnt_a(n), cnt_b(n);
-    rep(i,k){
-        cnt_a[a[i]-1]++;
-        cnt_b[b[i]-1]++;
+    vector<ll> a(n,0), b(n,0);
+    rep(i,k*2){
+        int v;
+        cin >> v;
+        v--;
+        if(i<k) a[v]++;
+        else b[v]++;
     }
 
     dsu uf(n);
@@ -89,20 +88,21 @@ int main(){
     rep(i,m){
         auto[w,u,v] = edges[i];
         if(uf.same(u,v)) continue;
+
         int ru = uf.leader(u);
         int rv = uf.leader(v);
+        rep(ri,2){
+            ll vs = min(a[ru],b[rv]);
+            ans += w*vs;
+            a[ru] -= vs;
+            b[rv] -= vs;
+            swap(rv,ru);
+        }
+
         uf.merge(u,v);
-        int new_root = uf.leader(u);
-        ll vab = min(cnt_a[ru],cnt_b[rv]);
-        ans += w*vab;
-        cnt_a[ru] -= vab;
-        cnt_b[rv] -= vab;
-        ll vba = min(cnt_a[rv],cnt_b[ru]);
-        ans += w*vba;
-        cnt_a[rv] -= vba;
-        cnt_b[ru] -= vba;
-        cnt_a[new_root] = cnt_a[ru] + cnt_a[rv];
-        cnt_b[new_root] = cnt_b[ru] + cnt_b[rv];
+        int nr = uf.leader(u);
+        a[nr] = a[ru] + a[rv];
+        b[nr] = b[ru] + b[rv];
     }
     cout << ans << endl;
 }
