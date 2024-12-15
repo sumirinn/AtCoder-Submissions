@@ -63,7 +63,7 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 int main(){
     int h, w;
-    ull x;
+    ll x;
     cin >> h >> w >> x;
     int sh, sw;
     cin >> sh >> sw;
@@ -71,10 +71,10 @@ int main(){
     vvl s(h,vl(w));
     rep(i,h)rep(j,w) cin >> s[i][j];
 
-    using P = pair<ull,pii>;
+    using P = pair<ll,pii>;
     priority_queue<P,vector<P>,greater<P>> q;
     q.push(P(s[sh][sw],pii(sh,sw)));
-    ull ans = 0;
+    ll ans = 0;
     vvb used(h,vb(w,false));
     while(!q.empty()){
         auto [now,np] = q.top();
