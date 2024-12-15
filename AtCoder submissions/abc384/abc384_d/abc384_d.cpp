@@ -76,7 +76,7 @@ int main(){
     ll now = 0;
     rep(r,2*n){
         now += a[r];
-        while(l<=r && l<2*n-1 && s<now){
+        while(l<=r && s<now){
             now -= a[l];
             l++;
         }
