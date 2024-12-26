@@ -121,7 +121,6 @@ int main(){
 
     lazy_segtree<S,op,e,F,mapping,composition,id> t(n);
     rep(i,n){
-        int l0, l1, r0, r1, siz, max0, max1;
         if(s[i]=='0') t.set(i,S{1,0,1,0,1,1,0});
         if(s[i]=='1') t.set(i,S{0,1,0,1,1,0,1});
     }
