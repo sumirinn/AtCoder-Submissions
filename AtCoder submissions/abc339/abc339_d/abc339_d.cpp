@@ -72,8 +72,6 @@ int main(){
         st *= n; st += i;
     }
 
-    int n2 = n*n;
-    int n3 = n*n*n;
     int n4 = n*n*n*n;
     using P = pair<pii,pii>;
     auto p2i =[&](int pos)->P{
@@ -82,16 +80,6 @@ int main(){
         res.fi.se = pos%n; pos /= n;
         res.se.fi = pos%n; pos /= n;
         res.se.se = pos%n;
-        if(res.fi.fi<res.se.fi) return res;
-        if(res.fi.fi>res.se.fi){
-            swap(res.fi.fi,res.se.fi);
-            swap(res.fi.se,res.se.se);
-            return res;
-        }
-        if(res.fi.se>res.se.se){
-            swap(res.fi.se,res.se.se);
-            return res;
-        }
         return res;
     };
     auto i2p =[&](int i1, int j1, int i2, int j2)->int{
