@@ -75,21 +75,21 @@ int main(){
 
     vi ans, used(n);
     rep(i,n)if(!used[i]){
-        auto dfs =[&](auto dfs, int v, int pe=-1)->int{
-            int now = 0;
-            used[v] = true;
-            for(auto[nex,id] : g[v]){
+        auto dfs =[&](auto dfs, int now, int pre_edge=-1)->int{
+            bool on = false;
+            used[now] = true;
+            for(auto[nex,id] : g[now]){
                 if(used[nex]) continue;
-                now ^= dfs(dfs,nex,id);
+                on ^= dfs(dfs,nex,id);
             }
-            int target = k==0 ? 0 : 1;
+            bool target = k==0 ? 0 : 1;
             int res = 0;
-            if(now!=target & pe!=-1){
-                now ^= 1;
+            if(on!=target & pre_edge!=-1){
+                on = target;
                 res = 1;
-                ans.pb(pe);
+                ans.pb(pre_edge);
             }
-            k -= now;
+            if(on) k--;
             return res;
         };
         dfs(dfs,i);
