@@ -65,52 +65,26 @@ int main(){
     int n, m;
     cin >> n >> m;
     dsu uf(n);
-    vvi c(n);
+    vc<tuple<int,int,int>> es;
     rep(i,m){
         int u, v;
         cin >> u >> v;
         u--; v--;
-        if(!uf.same(u,v)){
-            uf.merge(u,v);
-            continue;
-        }
-        c[u].pb(i);
+        if(uf.same(u,v)) es.eb(i,u,v);
+        else uf.merge(u,v);
     }
 
-    vector<vector<pii>> cs(n);
-    vi cnt(n);
-    int ans = 0;
-    rep(pre,n){
-        int root = uf.leader(pre);
-        if(root==pre) ans++;
-        for(int id : c[pre]){
-            cs[root].eb(pre,id);
-            cnt[root]++;
-        }
-    }
-    cout << ans-1 << endl;
+    set<int> leaders;
+    rep(i,n) leaders.insert(uf.leader(i));
 
-    vi id(n);
-    rep(i,n) id[i] = i;
-    sort(nall(id),[&](int a, int b){
-        return cnt[a]>cnt[b];
-    });
-
-    int r = id[0];
-    stack<pii> st;
-    for(auto[ID,PRE] : cs[r]){
-        st.emplace(ID,PRE);
-    }
-
-    for(int now : id){
-        if(uf.same(r,now)) continue;
-        int nr = uf.leader(now);
-        uf.merge(r,now);
-        auto[pre,num] = st.top();
-        st.pop();
-        for(auto[ID,PRE] : cs[nr]){
-            st.emplace(ID,PRE);
-        }
-        cout << num+1 << " " << pre+1 << " " << now+1 << endl;
+    cout << leaders.size() - 1 << endl;
+    while(leaders.size()>1){
+        auto [ei,a,b] = es.back();
+        es.pop_back();
+        int v = uf.leader(a); leaders.erase(v);
+        int u = *leaders.begin(); leaders.erase(u);
+        uf.merge(u,v);
+        leaders.insert(uf.leader(v));
+        cout << ei+1 << " " <<  a+1 << " " << u+1 << endl;
     }
 }
