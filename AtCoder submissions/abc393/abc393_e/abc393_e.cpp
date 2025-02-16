@@ -79,6 +79,6 @@ int main(){
         if(c[g]<k) continue;
         for(int i=g; i<=m; i += g) best[i] = g;
     }
-    rep(i,n) cout << best[a[i]] << endl;
+    rep(i,n) cout << best[a[i]] << '\n';
 
 }
