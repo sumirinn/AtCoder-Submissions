@@ -65,41 +65,12 @@ int main(){
     int n;
     string s;
     cin >> n >> s;
-
-    ll fid=0;
-    ll bid=0;
-    ll fc=0;
-    ll bc=0;
-    rep(i,n)if(s[i]=='1'){
-        bid += i;
-        bc++;
-    }
-    //cout << bid << " " << bc << endl;
-
-    ll ans = INF;
-    rep(i,n){
-        if(s[i]=='0'){
-            ll res = 0;
-            res += i*fc - fid;
-            res += bid - i*bc;
-            res -= c2(fc+1);
-            res -= c2(bc+1);
-            res += min(fc,bc);
-            chmin(ans,res);
-        }
-        if(s[i]=='1'){
-            bid -= i;
-            bc--;
-            ll res = 0;
-            res += i*fc - fid;
-            res += bid - i*bc;
-            res -= c2(fc+1);
-            res -= c2(bc+1);
-            chmin(ans,res);
-            fc++;
-            fid += i;
-        }
-    }
-
-    cout << ans << endl;
+    vi p;
+    rep(i,n)if(s[i]=='1') p.pb(i);
+    int k = p.size();
+    rep(i,k) p[i] -= i;
+    int med = p[k/2];
+    ll ans = 0;
+    rep(i,k) ans += abs(med-p[i]);
+    cout << ans << endl; 
 }
