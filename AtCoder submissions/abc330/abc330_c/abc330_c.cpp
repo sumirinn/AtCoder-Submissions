@@ -79,7 +79,7 @@ int main(){
         now *= -1;
         int pos = lower_bound(nall(p),now) - p.begin();
         if(pos<n) chmin(ans,p[pos]-now);
-        if(pos+1<n) chmin(ans,p[pos+1]-now);
+        //if(pos+1<n) chmin(ans,p[pos+1]-now);
         if(pos-1>=0) chmin(ans,now-p[pos-1]);
     }
     cout << ans << endl;
