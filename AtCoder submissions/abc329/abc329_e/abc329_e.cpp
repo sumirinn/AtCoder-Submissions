@@ -72,7 +72,7 @@ int main(){
         rep(j,m){
             if(i+j>=n){
                 ok = false;
-                continue;
+                break;
             }
             if(s[i+j]!=t[j]) ok = false;
         }
@@ -86,7 +86,7 @@ int main(){
         rep(j,m)if(s[pos+j]!='#') end = false;
         if(end) continue;
         rep(j,m) s[pos+j] = '#';
-        for(int st=-m; st<=-1; st++){
+        for(int st=-m; st<=m; st++){
             bool ok = true;
             rep(j,m){
                 if(pos+st+j<0 || pos+st+j>=n){
@@ -97,32 +97,7 @@ int main(){
                     ok = false;
                 } 
             }
-            if(!ok) continue;
-            bool ok2 = false;
-            rep(j,m)if(s[pos+st+j]!='#') ok2 = true;
-            if(ok2){
-                q.emplace(pos+st);
-                break;
-            }
-        }
-        for(int st=m; st>=1; st--){
-            bool ok = true;
-            rep(j,m){
-                if(pos+st+j<0 || pos+st+j>=n){
-                    ok = false;
-                    break;
-                }
-                if(s[pos+st+j]!=t[j]&&s[pos+st+j]!='#'){
-                    ok = false;                    
-                } 
-            }
-            if(!ok) continue;
-            bool ok2 = false;
-            rep(j,m)if(s[pos+st+j]!='#') ok2 = true;
-            if(ok2){
-                q.emplace(pos+st);
-                break;
-            }   
+            if(ok) q.emplace(pos+st);
         }
     }
 
