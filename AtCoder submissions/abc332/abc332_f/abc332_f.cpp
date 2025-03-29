@@ -8,7 +8,7 @@ using ull = unsigned long long;
 using ld = long double; 
 using bl = bool;
 const int inf = 1001001001; 
-const ll INF = 5e18;
+//const ll INF = 3e18;
 template<typename T> using vc = vector<T>;
 template<typename T> using vv = vc<vc<T>>;
 template<class T> using pq = priority_queue<T, vc<T>>;//大きい順
@@ -61,38 +61,38 @@ const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
-mint op(mint a, mint b){return a+b;}
-mint e(){return 0;}
+using S = mint;
 struct F{
     mint a, b;
     F(mint a=1, mint b=0): a(a), b(b) {}
 };
-mint mapping(F f, mint x){return f.a*x + f.b;}
-F comopsition(F g, F f){
-    return F(g.a*f.a, g.b + g.a*f.b);
+S op(S a, S b){return 0;}
+S e(){return 0;}
+S mapping(F f, S x){return f.a*x + f.b;}
+F composition(F f, F g){
+    return F(g.a*f.a, f.a*g.b+f.b);
 }
 F id(){return F(1,0);}
+
 
 int main(){
     int n, m;
     cin >> n >> m;
-    vc<mint> a;
+    lazy_segtree<S,op,e,F,mapping,composition,id> t(n);
     rep(i,n){
-        int _a;
-        cin >> _a;
-        a.pb(_a);
+        ll a;
+        cin >> a;
+        t.set(i,a);
     }
 
-    lazy_segtree<mint,op,e,F,mapping,comopsition,id> t(a);
     rep(mi,m){
-        int l, r, x;
+        ll l, r, x;
         cin >> l >> r >> x;
+        mint p = mint(r-l+1).inv();
         l--;
-        mint p = mint(1)/(r-l);
-        mint q = mint(1) - p;
-        t.apply(l,r,F(q,p*x));
+        t.apply(l,r,F(1-p,x*p));
     }
 
-    rep(i,n)cout << t.get(i).val() << " ";
+    rep(i,n) cout << t.get(i).val() << " ";
     cout << endl;
 }
