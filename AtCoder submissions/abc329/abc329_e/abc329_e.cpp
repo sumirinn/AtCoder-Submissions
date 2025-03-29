@@ -69,32 +69,29 @@ int main(){
     queue<int> q;
     rep(i,n){
         bool ok = true;
-        rep(j,m){
-            if(i+j>=n || s[i+j]!=t[j]){
-                ok = false;
-                break;
-            }
-        }
+        rep(j,m)if(i+j>=n||s[i+j]!=t[j]) ok = false;
         if(ok) q.emplace(i);
     }
 
     while(!q.empty()){
         int pos = q.front();
         q.pop();
+
         bool end = true;
-        rep(j,m)if(s[pos+j]!='#') end = false;
+        rep(j,m){
+            if(s[pos+j]!='#') end = false;
+            s[pos+j] = '#';
+        }
         if(end) continue;
-        rep(j,m) s[pos+j] = '#';
+
         for(int st=-m; st<=m; st++){
             bool ok = true;
             rep(j,m){
-                if(pos+st+j<0 || pos+st+j>=n){
+                if(pos+st+j<0||pos+st+j>=n){
                     ok = false;
                     break;
                 }
-                if(s[pos+st+j]!=t[j]&&s[pos+st+j]!='#'){
-                    ok = false;
-                } 
+                if(s[pos+st+j]!=t[j]&&s[pos+st+j]!='#') ok = false;
             }
             if(ok) q.emplace(pos+st);
         }
