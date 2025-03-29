@@ -70,11 +70,10 @@ int main(){
     rep(i,n){
         bool ok = true;
         rep(j,m){
-            if(i+j>=n){
+            if(i+j>=n || s[i+j]!=t[j]){
                 ok = false;
                 break;
             }
-            if(s[i+j]!=t[j]) ok = false;
         }
         if(ok) q.emplace(i);
     }
