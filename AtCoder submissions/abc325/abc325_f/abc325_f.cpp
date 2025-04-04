@@ -70,23 +70,36 @@ int main(){
 	vl l(m), c(m), k(m);
 	rep(i,m) cin >> l[i] >> c[i] >> k[i];
 
-	vl dp(k[0]+1,INF);
-	dp[0] = 0;
-	rep(i,n){
-		vl pre(k[0]+1,INF);
-		swap(pre,dp);
-		rep(j,k[0]){
-			for(ll nj=j; nj<=k[0]; nj++){
-				ll cnt0 = nj-j;
-				ll len = max(d[i]-l[0]*cnt0, 0ll);
-				ll cnt1 = (len+l[1]-1) / l[1];
-				chmin(dp[nj], pre[j] + cnt1);
+	vv<pll> dp(k[0]+1,vc<pll>(k[1]+1,pll(0,0)));
+	rep(i,k[0]+1)rep(j,k[1]+1){
+		if(i<k[0]){
+			auto pre = dp[i][j];
+			if(pre.fi<n){
+				pre.se += l[0];
+				if(pre.se>=d[pre.fi]){
+					pre.fi++;
+					pre.se = 0;
+				}
 			}
+			chmax(dp[i+1][j],pre);
+		}
+		if(j<k[1]){
+			auto pre = dp[i][j];
+			if(pre.fi<n){
+				pre.se += l[1];
+				if(pre.se>=d[pre.fi]){
+					pre.fi++;
+					pre.se = 0;
+				}
+			}
+			chmax(dp[i][j+1],pre);
 		}
 	}
 
 	ll ans = INF;
-	rep(j,k[0]+1)if(dp[j]<=k[1]) chmin(ans, c[0]*j+c[1]*dp[j]);
-	if(ans == INF) ans = -1;
+	rep(i,k[0]+1)rep(j,k[1]+1)if(dp[i][j].fi==n){
+		chmin(ans,i*c[0]+j*c[1]);
+	}
+	if(ans==INF) ans = -1;
 	cout << ans << endl;
 }
