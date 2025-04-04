@@ -76,10 +76,11 @@ int main(){
 		vl pre(k[0]+1,INF);
 		swap(pre,dp);
 		rep(j,k[0]){
-			ll r = d[i];
-			for(int nj=j; nj<=k[0]; nj++){
-				chmin(dp[nj], pre[j] + (r+l[1]-1)/l[1]);
-				r = max(r-l[0],(ll)0);
+			for(ll nj=j; nj<=k[0]; nj++){
+				ll cnt0 = nj-j;
+				ll len = max(d[i]-l[0]*cnt0, 0ll);
+				ll cnt1 = (len+l[1]-1) / l[1];
+				chmin(dp[nj], pre[j] + cnt1);
 			}
 		}
 	}
