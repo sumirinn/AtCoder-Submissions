@@ -85,8 +85,8 @@ int main(){
 		}
 	}
 
-	ll ans = INF*2;
-	rep(j,k[0]+1)if(dp[j]<=k[1]) chmin(ans, c[0]*j + c[1]*dp[j]);
-	if(ans == INF*2) ans = -1;
+	ll ans = INF;
+	rep(j,k[0]+1)if(dp[j]<=k[1]) chmin(ans, c[0]*j+c[1]*dp[j]);
+	if(ans == INF) ans = -1;
 	cout << ans << endl;
 }
