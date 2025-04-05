@@ -62,16 +62,20 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
 int main(){
-    int q, k;
-    cin >> q >> k;
-    vc<mint> dp(k+1);
-    dp[0] = 1;
-    rep(qi,q){
-        char t;
-        int x;
-        cin >> t >> x;
-        if(t=='+')for(int i=k; i>=x; i--) dp[i] += dp[i-x];
-        if(t=='-')for(int i=x; i<=k; i++) dp[i] -= dp[i-x]; 
-        cout << dp[k].val() << endl;
-    }
+	int q, k;
+	cin >> q >> k;
+	vc<mint> dp(k+1);
+	dp[0] = 1;
+	rep(qi,q){
+		char t;
+		int x;
+		cin >> t >> x;
+		if(t=='+'){
+			drep(i,k+1)if(i+x<=k) dp[i+x] += dp[i];
+		}
+		if(t=='-'){
+			rep(i,k+1)if(i+x<=k) dp[i+x] -= dp[i];
+		}
+		cout << dp[k].val() << endl;
+	}
 }
