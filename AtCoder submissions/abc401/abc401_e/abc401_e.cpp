@@ -64,14 +64,11 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, m;
     cin >> n >> m;
-    vvi to(n);
     vc<pii> es1, es2;
     rep(mi,m){
         int u, v;
         cin >> u >> v;
         u--; v--;
-        to[u].pb(v);
-        to[v].pb(u);
         if(u>v) swap(u,v);
         es1.eb(u,v);
         es2.eb(v,-u);
@@ -79,28 +76,20 @@ int main(){
     sort(nall(es1));
     sort(nall(es2));
 
-    dsu uf1(n);
-    dsu uf2(n);
+    dsu uf1(n), uf2(n);
     int j1=0, j2=0;
-    queue<int> q;
     rep(i,n){
-        q.push(i);
         while(j1<m && es1[j1].fi<=i){
             auto[u,v] = es1[j1];
             j1++;
             uf1.merge(u,v);
         }
-        while(j2<m && es2[j2].fi<=i && es2[j2].se<=i){
+        while(j2<m && es2[j2].fi<=i){
             auto [u,v] = es2[j2];
-            j2++; v = -v;
-            uf2.merge(u,v);
+            j2++;
+            uf2.merge(u,-v);
         }
-        while(!q.empty()){
-            int nv = q.front();
-            if(uf1.same(0,nv)) q.pop();
-            else break;
-        }
-        if(q.empty() && uf2.size(0)==i+1) cout << uf1.size(0) - (i+1) << endl;
+        if(uf2.size(0)==i+1) cout << uf1.size(0)-(i+1) << endl;
         else cout << -1 << endl;
     }
 }
