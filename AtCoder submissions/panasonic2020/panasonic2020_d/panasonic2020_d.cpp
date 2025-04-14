@@ -64,17 +64,17 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n;
     cin >> n;
-    vc<set<string>> ans(n+1);
-    ans[0].insert("a");
+    set<string> ans;
+    ans.insert("a");
     rep(i,n-1){
-        // siz = i+1
-        for(string s : ans[i]){
+        set<string> pre;
+        swap(pre,ans);
+        for(string s : pre){
             set<char> st;
             for(char x : s) st.insert(x);
-            rep(x,st.size()) ans[i+1].insert(s+char('a'+x));
-            ans[i+1].insert(s + char('a'+st.size()));
+            rep(x,st.size()+1) ans.insert(s+char('a'+x));
         }
     }
 
-    for(string e : ans[n-1]) cout << e << endl;
+    for(string e : ans) cout << e << endl;
 }
