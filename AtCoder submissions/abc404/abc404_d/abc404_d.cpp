@@ -83,18 +83,17 @@ int main(){
 
     ll ans = INF;
     rep(s,n3){
-        vi cnt(m);
+        vi ac(m);
         ll now = 0;
         rep(z,n){
-            int nc = (s/p3[z])%3;
-            for(int i : a[z]) cnt[i] += nc;
-            now += c[z]*(ll)nc;
+            ll cnt = (s/p3[z])%3;
+            for(int i : a[z]) ac[i] += cnt;
+            now += c[z]*cnt;
         }
         bool ok = true;
-        rep(i,m)if(cnt[i]<=1) ok = false;
+        rep(i,m)if(ac[i]<=1) ok = false;
         if(ok) chmin(ans,now);
     }
-
 
     cout << ans << endl;
 }
