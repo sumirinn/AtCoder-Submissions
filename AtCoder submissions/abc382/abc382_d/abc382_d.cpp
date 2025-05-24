@@ -8,7 +8,7 @@ using ull = unsigned long long;
 using ld = long double; 
 using bl = bool;
 const int inf = 1001001001; 
-const ll INF = 2e18;
+const ll INF = 3e18;
 template<typename T> using vc = vector<T>;
 template<typename T> using vv = vc<vc<T>>;
 template<class T> using pq = priority_queue<T, vc<T>>;//大きい順
@@ -64,27 +64,27 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, m;
     cin >> n >> m;
-
     vvi ans;
-    auto f = [&](auto f, vi a){
-        if(a.size()==n){
-            ans.pb(a);
+    vi v(0);
+
+    auto dfs = [&](auto dfs, int now)->void{
+        int siz = v.size();
+        if(siz==n){
+            ans.pb(v);
             return;
         }
-
-        int l = 1;
-        if(a.size()>0) l = a.back()+10;
-        a.pb(l);
-        while(a.back()+10*(n-a.size())<=m){
-            f(f,a);
-            a.back()++;
+        while(now + (n-siz-1)*10 <= m){
+            v.pb(now);
+            dfs(dfs,now+10);
+            v.pop_back();
+            now++;
         }
     };
-    f(f,vi());
+    dfs(dfs,1);
 
     cout << ans.size() << endl;
-    for(auto a : ans){
-        rep(i,n) cout << a[i] << " ";
+    for(auto vec : ans){
+        for(int e : vec) cout << e << " ";
         cout << endl;
     }
 }
