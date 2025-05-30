@@ -64,22 +64,25 @@ const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 int main(){
     int n, q;
     cin >> n >> q;
-    vc<set<int>> c(n);
+    vc<set<int>> st(n); 
     rep(i,n){
-        int _c;
-        cin >> _c;
-        c[i].insert(_c);
+        int c;
+        cin >> c;
+        st[i].insert(c); 
     }
 
     rep(qi,q){
         int a, b;
         cin >> a >> b;
         a--; b--;
-        if(c[a].size()>c[b].size()) swap(c[a],c[b]);
-        for(int e : c[a]){
-            c[b].insert(e);
+        if(st[a].size()<st[b].size()){
+            for(int e : st[a]) st[b].insert(e);
+            st[a].clear();
+        }else{
+            for(int e : st[b]) st[a].insert(e);
+            st[b].clear();
+            swap(st[a],st[b]);
         }
-        c[a] = {};
-        cout << c[b].size() << endl;
+        cout << st[b].size() << endl;
     }
 }
