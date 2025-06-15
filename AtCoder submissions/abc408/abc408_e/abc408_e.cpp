@@ -61,11 +61,17 @@ const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
+struct edge {
+    int u, v;
+    ll w;
+    edge(int u, int v, ll w) : u(u), v(v), w(w) {}
+};
+
+
 int main(){
     int n, m;
     cin >> n >> m;
-    using tp = tuple<int, int, ll>;
-    vector<tp> es;
+    vector<edge> es;
     rep(i,m){
         int u, v;
         ll w;
@@ -77,17 +83,13 @@ int main(){
     ll ans = 0;
     drep(k,30){
         dsu uf(n);
-        for(auto& e : es)if(!(get<2>(e) & (1LL << k))){
-            int u = get<0>(e);
-            int v = get<1>(e);
-            uf.merge(u, v);
+        for(auto& e : es)if(!(1&e.w>>k)){
+            uf.merge(e.u, e.v);
         }
         if(uf.same(0,n-1)){
-            vector<tp> nes;
+            vector<edge> nes;
             for(auto& e : es){
-                if(!(get<2>(e) & (1LL << k))){
-                    nes.eb(get<0>(e), get<1>(e), get<2>(e));
-                }
+                if(!(1&e.w>>k)) nes.eb(e.u, e.v, e.w);
             }
             swap(nes, es);
         }
