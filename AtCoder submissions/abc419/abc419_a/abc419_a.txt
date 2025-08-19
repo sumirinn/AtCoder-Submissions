@@ -1,0 +1,13 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        String ans = "Unknown";
+        if (s.equals("red")) ans = "SSS";
+        if (s.equals("blue")) ans = "FFF";
+        if (s.equals("green")) ans = "MMM";
+        System.out.println(ans);
+    }
+}
