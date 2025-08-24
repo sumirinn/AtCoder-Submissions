@@ -1,0 +1,29 @@
+import java.util.*;
+
+
+public class Main {
+    static void YN(boolean b) {System.out.println(b ? "Yes" : "No");}
+
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        int n = s.length();
+
+        int cnt = 0;
+        int pre = 0;
+        for (int i=0; i<n; i++) {
+            if(s.charAt(i)=='#') {
+                if(cnt==1) cnt++;
+                if(cnt==0) {
+                    cnt++;
+                    pre = i+1;
+                }
+            }
+            if(cnt==2) {
+                System.out.println(pre + "," + (i + 1));
+                cnt = 0;
+            }
+        }
+    }
+}
