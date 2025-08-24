@@ -1,23 +1,23 @@
-import java.math.*;
 import java.util.*;
 
 public class Main {
+    static void YN(boolean b) {System.out.println(b ? "Yes" : "No");}
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int N = sc.nextInt();
-		long len = 0;
-		String S = "";
-		for (int i = 0; i < N; i++) {
-			String c = sc.next();
-			long l = sc.nextLong();
-			len += l;
-			if (len > 100) {
-				System.out.println("Too Long");
-				return;
-			}
-			S += c.repeat((int) l);
-		}
-		System.out.println(S);
-	}
+        long cnt = 0;
+        String ans = "";
+        for (int i=0; i<n; i++) {
+            String c = sc.next();
+            long l = sc.nextLong();
+            cnt += l;
+            if (cnt>100) {
+                System.out.println("Too Long");
+                return;
+            }
+            for (long j=0; j<l; j++) ans += c;
+        }
+        System.out.println(ans);
+    }
 }
