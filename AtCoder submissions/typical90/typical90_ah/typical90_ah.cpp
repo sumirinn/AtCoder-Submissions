@@ -66,23 +66,23 @@ int main(){
     int n, k;
     cin >> n >> k;
     n++;
-    vl a(n);
+    vi a(n);
     rep(i,n-1) cin >> a[i];
-    a[n-1] = INF;
+    a[n-1] = inf;
 
     int r=0;
-    map<ll,ll> cnt;
-    int spi = 0;
+    map<int,int> mp;
+    int cnt = 0;
     ll ans = 0;
     rep(l,n){
-        while(r<n && spi<=k){
-            if(cnt[a[r]]==0) spi++;
-            cnt[a[r]]++;
+        while(r<n && cnt<=k){
+            if(mp[a[r]]==0) cnt++;
+            mp[a[r]]++;
             r++;
         }
         chmax(ans,r-l-1);
-        cnt[a[l]]--;
-        if(cnt[a[l]]==0) spi--;
+        mp[a[l]]--;
+        if(mp[a[l]]==0) cnt--;
     }
     cout << ans << endl;
 }
