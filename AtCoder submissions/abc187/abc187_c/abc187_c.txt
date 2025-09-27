@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        ArrayList<String> s = new ArrayList<>();
+        Set<String> st = new HashSet<>();
+        for (int i=0; i<n; i++) {
+            String ns = sc.next();
+            if(ns.charAt(0)=='!') {
+                String ns2 = ns.substring(1);
+                st.add(ns2);
+            }
+            else {
+                s.add(ns);
+            }
+        }
+
+        for (String e : s) {
+            if(st.contains(e)) {
+                System.out.println(e);
+                return;
+            }
+        }
+        System.out.println("satisfiable");
+    }
+}
