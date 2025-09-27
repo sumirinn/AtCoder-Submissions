@@ -1,0 +1,58 @@
+import java.util.*;
+
+public class Main {
+public static boolean nextPermutation(int[] array) {
+        int i = array.length - 2;
+        // iを降順になるまで左に移動
+        while (i >= 0 && array[i] >= array[i + 1]) i--;
+        if (i < 0) return false; // 次の順列はない
+
+        int j = array.length - 1;
+        while (array[j] <= array[i]) j--;
+
+        // iとjを交換
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+
+        // i+1 以降を反転
+        int left = i + 1, right = array.length - 1;
+        while (left < right) {
+            temp = array[left];
+            array[left] = array[right];
+            array[right] = temp;
+            left++;
+            right--;
+        }
+
+        return true; // 次の順列が生成された
+    }
+
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        long k = sc.nextLong();
+        long[][] t = new long[n][n];
+        for(int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                t[i][j] = sc.nextLong();
+            }
+        }
+
+        int[] p = new int[n-1];
+        for(int i=0; i<n-1; i++) p[i] = i;
+
+        int ans = 0;
+        do {
+            long now = 0;
+            now += t[0][p[0]+1];
+            for(int i=0; i<n-2; i++) {
+                now += t[p[i]+1][p[i+1]+1];
+            }
+            now += t[p[n-2]+1][0];
+            if (now==k) ans++;
+        } while (nextPermutation(p));
+        System.out.println(ans);
+    }
+}
