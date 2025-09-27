@@ -1,0 +1,25 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+
+        int ans = 0;
+        for (int x=1; x<=n; x++) {
+            boolean ok = true;
+            int nx = x;
+            while (nx>0) {
+                if(nx%10==7) ok = false;
+                nx /= 10;
+            }
+            int mx = x;
+            while (mx>0) {
+                if(mx%8==7) ok = false;
+                mx /= 8;
+            }
+            if(ok) ans ++;
+        }
+        System.out.println(ans);
+    }
+}
