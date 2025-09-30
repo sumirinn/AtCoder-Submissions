@@ -1,58 +1,39 @@
 #include <bits/stdc++.h>
-using namespace std;
 #include <atcoder/all>
+using namespace std;
 using namespace atcoder;
-#define rep(i, n) for (int i = 0; i < (n); i++)
-#define repp(i, n) for (int i = 1; i <= (n); i++)
-#define pb push_back
-#define eb emplace_back
-#define fi first
-#define se second
-using ll = long long; using db = double; using ull = unsigned long long;
-using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<double, double>; 
-using pli = pair<ll, int>; using pil = pair<int, ll>;
-const int inf = 1001001001; 
-const ll INF = 3e18;
-using mint = modint998244353;
-//using mint = modint1000000007;
-//using mint = modint;
-//mint::set_mod(m);で定義できる
-//a,bが0だと使えないことに注意
-ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
-ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-ll c2(ll n) {return n*(n-1) / 2;} 
-ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
-using P = pair<int, pii>;
-using C = complex<double>;
-void chmax(ll& x, ll y) {x = max(x, y);} 
-void chmin(int& x, int y) {x = min(x, y);}
-const int di[] = {1, 0, -1, 0};
-const int dj[] = {0, -1, 0, 1};
-const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+#define rep(i, l, r) for (ll i = (l); i < (r); ++i)
+#define all(x) (x).begin(), (x).end()
+using ll = long long;
+using pl = pair<ll,ll>;
+using vi = vector<int>;
+using vvi = vector<vector<int>>;
+using vl = vector<ll>;
+using vvl = vector<vector<ll>>;
+const ll INF = 1e18;
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+using mint = modint1000000007;
 
-
-int main(){
-    int n, x, y;
+int main() {
+    ll n, x, y;
     cin >> n >> x >> y;
+    vl a(n), b(n);
+    rep(i,0,n) cin >> a[i] >> b[i];
+    vector<vector<vector<ll>>> dp(n+1, vector<vector<ll>> (n+1, vector<ll> (x+1, 1e9)));
+    dp[0][0][0] = 0;
+    rep(i,0,n) rep(j,0,n) rep(k,0,x+1) {
+        dp[i+1][j][k] = min(dp[i+1][j][k], dp[i][j][k]);
+        if (k+a[i] > x) continue;
+        dp[i+1][j+1][k+a[i]] = min(dp[i+1][j+1][k+a[i]], dp[i][j][k] + b[i]);
+    }
 
-    vector<vector<int>> dp(x+1,vector<int>(n+1,inf));
-    dp[0][0] = 0;
-    rep(i,n){
-        int a, b;
-        cin >> a >> b;
-
-        for(int j=x; j>=0; j--)rep(k,n+1){
-            int now = dp[j][k];
-            if(now==inf) continue;
-            if(j+a<=x) chmin(dp[j+a][k+1], now+b);
+    for(ll i=n; i>=0; i--) {
+        rep(k,0,x+1)
+            if (dp[n][i][k] <= y) {
+                if(i<n) i++;
+                cout << i << endl;
+                return 0;
         }
     }
-
-    int ans = 0;
-    rep(j,x+1)rep(k,n+1) if(dp[j][k]<=y){
-        ans = max(ans, k);
-    }
-    if(ans<n) ans++;
-    cout << ans << endl;
 }
