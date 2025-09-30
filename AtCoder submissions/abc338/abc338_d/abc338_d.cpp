@@ -3,12 +3,12 @@ using namespace std;
 #include <atcoder/all>
 using namespace atcoder;
 using ll = long long;
-using db = double; 
+using db = double;
 using ull = unsigned long long;
-using ld = long double; 
+using ld = long double;
 using bl = bool;
-const int inf = 1001001001; 
-const ll INF = 5e18;
+const int inf = 1001001001;
+const ll INF = 3e18;
 template<typename T> using vc = vector<T>;
 template<typename T> using vv = vc<vc<T>>;
 template<class T> using pq = priority_queue<T, vc<T>>;//大きい順
@@ -42,7 +42,7 @@ bool out_grid(ll i, ll j, ll h, ll w) {//trueならcontinue
 }
 ll gcd(ll a, ll b) {if(a%b==0)return b; else return gcd(b, a%b);}
 ll lcm(ll a, ll b) {return a*b / gcd(a, b);}
-ll c2(ll n) {return n*(n-1) / 2;} 
+ll c2(ll n) {return n*(n-1) / 2;}
 ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
 #define vc_cout(v){ll n = size(v);rep(i,n)cout<<v[i]<<endl;}//一次元配列を出力する
 #define vv_cout(v){ll n = size(v);rep(i,n){rep(j,size(v[i])){cout<<v[i][j]<<' ';}cout<<endl;}}//二次元配列を出力する
@@ -51,7 +51,7 @@ ll c3(ll n) {return n*(n-1)*(n-2) / 6;}
 using mint = modint998244353;
 //using mint = modint1000000007;
 //using mint = modint; //mint::set_mod(m);で定義できる
-using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>; 
+using pii = pair<int, int>; using pll = pair<ll, ll>; using pdd = pair<db, db>;
 using pli = pair<ll, int>; using pil = pair<int, ll>;
 using vmint = vc<mint>; using vvmint = vv<mint>; using vvvmint = vv<vmint>;
 //using P = pair<db, int>;
@@ -61,34 +61,32 @@ const int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 const int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
-using S = ll;
-using F = ll;
-S op(S a, S b){return min(a,b);}
-S e(){return INF;}
-S mapping(F f, S x){return f+x;}
-F composition(F f, F g){return f+g;}
-F id(){return 0;}
 
 int main(){
     int n, m;
     cin >> n >> m;
-    lazy_segtree<S,op,e,F,mapping,composition,id> t(n);
-    rep(i,n) t.set(i,0);
-    int px;
-    cin >> px;
-    px--;
+
+    vl t(n+1);
+    int pre;
+    cin >> pre;
     rep(i,m-1){
-        int nx;
-        cin >> nx;
-        nx--;
-        vi x(2);
-        x[0]=px; x[1]=nx;
-        sort(nall(x));
-        ll d = x[1]-x[0];
-        t.apply(x[0],x[1],n-d);
-        t.apply(0,x[0],d);
-        t.apply(x[1],n,d);
-        px = nx;
+        int now;
+        cin >> now;
+        int x1 = min(pre,now);
+        int x2 = max(pre,now);
+        ll d = x2-x1;
+
+        t[0] += d;
+        t[x1] -= d;
+        t[x1] += n-d;
+        t[x2] -= n-d;
+        t[x2] += d;
+        t[n] -= d;
+
+        pre = now;
     }
-    cout << t.all_prod() << endl;
+    rep(i,n) t[i+1] += t[i];
+    ll ans = INF;
+    rep(i,n) chmin(ans,t[i]);
+    cout << ans << endl;
 }
