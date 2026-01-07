@@ -68,18 +68,16 @@ int main(){
     rep(i,n) cin >> a[i];
     rep(i,n) cin >> b[i];
     rep(i,n) cin >> c[i];
+
     vvl dp(n+1,vl(4,-INF));
     dp[0][0] = 0;
 
     rep(i,n){
-        chmax(dp[i+1][1], dp[i][0]+a[i]);
-        chmax(dp[i+1][1], dp[i][1]+a[i]);
-
-        chmax(dp[i+1][2], dp[i][1]+b[i]);
-        chmax(dp[i+1][2], dp[i][2]+b[i]);
-
-        chmax(dp[i+1][3], dp[i][2]+c[i]);
-        chmax(dp[i+1][3], dp[i][3]+c[i]);
+        rep(j,2){
+            chmax(dp[i+1][1], dp[i][j]+a[i]);
+            chmax(dp[i+1][2], dp[i][j+1]+b[i]);
+            chmax(dp[i+1][3], dp[i][j+2]+c[i]);
+        }
     }
     cout << dp[n][3] << endl;
 }
