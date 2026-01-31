@@ -69,24 +69,12 @@ int main(){
         cin >> n;
         vl r(n);
         rep(i,n) cin >> r[i];
-        pq_g<pli> q;
-        rep(i,n) q.push(pli(r[i],i));
-        auto s = r;
-        while(!q.empty()){
-            auto [now,pos] = q.top();
-            q.pop();
-            if(!(s[pos]==now)) continue;
-            if(pos && s[pos-1]>s[pos]+1){
-                s[pos-1] = s[pos] + 1;
-                q.push({s[pos-1],pos-1});
-            }
-            if(pos<n-1 && s[pos+1]>s[pos]+1){
-                s[pos+1] = s[pos] + 1;
-                q.push({s[pos+1],pos+1});
-            }
-        }
-        ll ans = 0;
-        rep(i,n) ans += r[i] - s[i];
-        cout << ans << endl;
+        ll s = 0;
+        rep(i,n) s += r[i];
+
+        rep(i,n)if(0<i) r[i] = min(r[i],r[i-1]+1);
+        drep(i,n)if(i<n-1) r[i] = min(r[i],r[i+1]+1);
+        rep(i,n) s -= r[i];
+        cout << s << endl;
     }
 }
