@@ -72,25 +72,27 @@ int main(){
         rep(i,n) s[i] = "#" + s[i] + "#";
         int w = n+2;
 
-        vvb dp(n, vb(w));
-        dp[n-1][c] = true;
+        vb dp(w);
+        dp[c] = true;
 
         vi bottom(w,n);
         rep(i,n)rep(j,w)if(s[i][j]=='#') bottom[j] = i;
 
         for(int i=n-2; i>=0; i--){
+            vb pre(w);
+            swap(pre,dp);
             for(int j=1; j<=n; j++){
-                if(!dp[i+1][j-1] && !dp[i+1][j] && !dp[i+1][j+1]) continue;
+                if(!pre[j-1] && !pre[j] && !pre[j+1]) continue;
                 if(s[i][j]=='#'){
                     if(bottom[j]!=i) continue;
                     rep(ni,n) s[ni][j] = '.';
                 }
-                dp[i][j] = true;
+                dp[j] = true;
             }
         }
 
         string ans;
-        repp(j,n) ans += '0' + dp[0][j];
+        repp(j,n) ans += '0' + dp[j];
         cout << ans << endl;
     }
 }
