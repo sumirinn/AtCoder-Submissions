@@ -75,21 +75,41 @@ int main(){
 
     int ans = inf;
     vvi ng(n, vi(n));
-    vi p(n);
-    rep(i,n) p[i] = i;
-    do{
-        bool out = false;
-        rep(i,n)if(p[i]==i || p[p[i]]==i) out = true;
-        if(out) continue;
-        vvi ng(n, vi(n));
+    vb used(n);
+    auto dfs = [&](auto dfs, int head, int now, int siz)->void{
         rep(i,n){
-            ng[i][p[i]] = 1;
-            ng[p[i]][i] = 1;
+            if(used[i]) continue;
+            used[i] = true;
+            ng[now][i] = 1;
+            ng[i][now] = 1;
+            dfs(dfs,head,i,siz+1);
+            used[i] = false;
+            ng[now][i] = 0;
+            ng[i][now] = 0;
         }
-        int cnt = 0;
-        rep(i,n)rep(j,n)if(g[i][j]!=ng[i][j]) cnt++;
-        cnt /= 2;
-        chmin(ans,cnt);
-    }while(next_permutation(nall(p)));
+        if(siz>=3){
+            ng[now][head] = 1;
+            ng[head][now] = 1;
+            bool ok = true;
+            rep(i,n){
+                if(used[i]==false && ok){
+                    ok = false;
+                    used[i] = true;
+                    dfs(dfs,i,i,1);
+                    used[i] = false;
+                }
+            }
+            if(ok){
+                int cnt = 0;
+                rep(i,n)rep(j,n)if(g[i][j]!=ng[i][j]) cnt++;
+                cnt /= 2;
+                chmin(ans,cnt);
+            }
+            ng[now][head] = 0;
+            ng[head][now] = 0;
+        }
+    };
+    used[0] = true;
+    dfs(dfs,0,0,1);
     cout << ans << endl;
 }
