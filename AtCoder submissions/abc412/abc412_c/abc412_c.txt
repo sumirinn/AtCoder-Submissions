@@ -67,24 +67,22 @@ int main(){
     rep(ti,t){
         int n;
         cin >> n;
-        ll fs, es;
         n--; n--;
+        ll fs, es;
         vl s(n);
         cin >> fs;
         rep(i,n) cin >> s[i];
         cin >> es;
         sort(nall(s));
-        int i = 0;
-        while(i<n && s[i]<=fs) i++;
+
         int cnt = 2;
-        while(i<n && s[i]<=fs*2 && fs*2<es){
-            if(i+1<n && s[i+1]<=fs*2){
-                i++;
-            }else{
-                fs = s[i];
-                i++;
-                cnt++;
-            }
+        rep(i,n){
+            if(s[i]<=fs) continue;
+            if(es<=fs*2) break;
+            if(i+1<n && s[i+1]<=fs*2) continue;
+            if(fs*2<s[i]) break;
+            fs = s[i];
+            cnt++;
         }
         if(fs*2<es) cnt = -1;
         cout << cnt << endl;
