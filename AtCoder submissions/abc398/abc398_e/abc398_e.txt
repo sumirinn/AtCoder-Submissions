@@ -105,7 +105,4 @@ int main(){
         }
         cnt--;
     }
-
-    int x, y;
-    cin >> x >> y;
 }
