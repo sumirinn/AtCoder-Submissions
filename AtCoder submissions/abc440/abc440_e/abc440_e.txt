@@ -71,18 +71,17 @@ int main(){
 
     using P = pair<ll, vi>;
     pq<P> q;
-    map<vi,int> mp;
+    set<vi> st;
     vi b(n);
     b[0] = k;
     q.emplace(a[0]*k, b);
 
-    int xi = 0;
-    while(xi<x){
+    while(x){
         auto [val, cnt] = q.top();
         q.pop();
-        if(mp[cnt]) continue;
-        xi++;
-        mp[cnt] = 1;
+        if(st.count(cnt)) continue;
+        x--;
+        st.insert(cnt);
         cout << val << endl;
 
         rep(i,n-1){
