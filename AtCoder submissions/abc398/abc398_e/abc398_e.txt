@@ -73,7 +73,6 @@ int main(){
         g[v][u] = 1;
     }
     rep(i,n) g[i][i] = 0;
-
     rep(k,n)rep(i,n)rep(j,n){
         chmin(g[i][j], g[i][k]+g[j][k]);
     }
@@ -91,7 +90,7 @@ int main(){
     if(cnt%2!=0) cout << "First" << endl;
     else cout << "Second" << endl;
 
-    while(!st.empty()){
+    while(cnt){
         if(cnt%2==0){
             int u, v;
             cin >> u >> v;
