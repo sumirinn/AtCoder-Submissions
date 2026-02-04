@@ -75,17 +75,11 @@ int main(){
         sb += b;
         v[i] = h - b;
     }
-    
+
     int m = sw/2;
     vl dp(m+1,-INF);
     dp[0] = 0;
-    rep(i,n){
-        auto pre = dp;
-        swap(pre,dp);
-        rep(j,m){
-            if(j+w[i]<m+1) chmax(dp[j+w[i]],pre[j]+v[i]);
-        }
-    }
+    rep(i,n)drep(j,m-w[i]+1) chmax(dp[j+w[i]],dp[j]+v[i]);
 
     cout << *max_element(nall(dp))+sb << endl;
 }
