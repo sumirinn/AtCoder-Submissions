@@ -70,30 +70,35 @@ int main(){
 
     set<ll> st;
     st.insert(-INF);
-    ll cnt = 0;
+    st.insert(INF);
     int l = 0;
     ll ans = 0;
     rep(r,n){
         auto it = st.lower_bound(a[r]);
-        while(it!=st.end() && *it-a[r]<d){
-            cnt--;
+        if(*it!=INF && *it-a[r]<d){
+            ll now = *it;
+            while(a[l]!=now){
+                st.erase(a[l]);
+                l++;
+            }
             st.erase(a[l]);
             l++;
-            it = st.lower_bound(a[r]);
         }
 
+        it = st.lower_bound(a[r]);
         it--;
-        while(*it!=-INF && a[r]-*it<d){
-            cnt--;
+        if(*it!=-INF && a[r]-*it<d){
+            ll now = *it;
+            while(a[l]!=now){
+                st.erase(a[l]);
+                l++;
+            }
             st.erase(a[l]);
             l++;
-            it = st.lower_bound(a[r]);
-            it--;
         }
-        cnt++;
+
         st.insert(a[r]);
-        // cout << cnt << endl;
-        ans += cnt;
+        ans += (ll)(st.size()-2);
     }
     cout << ans << endl;
 }
