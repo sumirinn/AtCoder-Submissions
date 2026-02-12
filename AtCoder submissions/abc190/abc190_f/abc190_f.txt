@@ -67,18 +67,16 @@ int main(){
     vi b(n);
     rep(i,n) cin >> b[i];
 
-    ll now = 0;
+    ll ans = 0;
     fenwick_tree<int> t(n);
     rep(i,n){
         int j = b[i];
-        now += t.sum(j,n);
+        ans += t.sum(j,n);
         t.add(j,1);
     }
-    // cout << now << endl;
 
     rep(i,n){
-        cout << now << endl;
-        now += n-1 - b[i];
-        now -= b[i];
+        cout << ans << endl;
+        ans += n-1 - 2*b[i];
     }
 }
