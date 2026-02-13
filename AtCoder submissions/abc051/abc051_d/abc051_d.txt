@@ -70,18 +70,19 @@ int main(){
         ll w;
         cin >> a >> b >> w;
         a--; b--;
-        chmin(g[a][b],w);
-        chmin(g[b][a],w);
+        g[a][b] = w;
+        g[b][a] = w;
     }
 
     auto pre = g;
     rep(i,n) g[i][i] = 0;
-    rep(k,n)rep(i,n)rep(j,n)chmin(g[i][j],g[i][k]+g[k][j]);
+    rep(k,n)rep(i,n)rep(j,n){
+        chmin(g[i][j],g[i][k]+g[k][j]);
+    }
 
     vvb used(n,vb(n));
     rep(i,n)rep(j,n){
         if(pre[i][j]==INF) continue;
-
         rep(s,n)rep(t,n){
             if(g[s][i]+pre[i][j]+g[j][t]==g[s][t]){
                 if(i>j) used[i][j] = true;
@@ -90,7 +91,7 @@ int main(){
         }
     }
 
-    int ans = 0;
-    rep(i,n)rep(j,n)if(used[i][j]) ans++;
-    cout << m - ans << endl;
+    int ans = m;
+    rep(i,n)rep(j,n)if(used[i][j]) ans--;
+    cout << ans << endl;
 }
